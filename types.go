@@ -6,14 +6,15 @@ import (
 	"time"
 )
 
+// Bearer represents the authentication token you're going to use
 var Bearer string
 
 const (
-	// Param type is QueryString (eg. ?CertCenterOrderId=123)
+	// CC_PARAM_TYPE_QS is QueryString (eg. ?CertCenterOrderId=123)
 	CC_PARAM_TYPE_QS = 1 << iota
-	// Param type is Path (eg. /:CertCenterOrderId/)
+	// CC_PARAM_TYPE_PATH is Path (eg. /:CertCenterOrderId/)
 	CC_PARAM_TYPE_PATH
-	// Param type is Body (JSON POST)
+	// CC_PARAM_TYPE_BODY is Body (JSON POST)
 	CC_PARAM_TYPE_BODY
 )
 
@@ -42,7 +43,7 @@ type ProfileResult struct {
 	Currency        string
 	CustomerID      int64
 	Locale          string
-	OAuth2_Token    string
+	OAuth2Token     string `json:"OAuth2Token"`
 	Scope           string
 	Timezone        string
 }
