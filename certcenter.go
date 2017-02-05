@@ -1,5 +1,6 @@
 package certcenter
 
+// Profile fetches basic informations about your profile
 func Profile() (*ProfileResult, error) {
 	req := new(apiRequest)
 	req.result = new(ProfileResult)
@@ -8,6 +9,7 @@ func Profile() (*ProfileResult, error) {
 	return req.result.(*ProfileResult), err
 }
 
+// Limit inquires information about your current limit and used amount
 func Limit() (*LimitResult, error) {
 	req := new(apiRequest)
 	req.result = new(LimitResult)
@@ -16,6 +18,7 @@ func Limit() (*LimitResult, error) {
 	return req.result.(*LimitResult), err
 }
 
+// Products allows you to fetch a list of valid ProductCodes 
 func Products() (*ProductsResult, error) {
 	req := new(apiRequest)
 	req.result = new(ProductsResult)
@@ -24,6 +27,7 @@ func Products() (*ProductsResult, error) {
 	return req.result.(*ProductsResult), err
 }
 
+// ProductDetails inquires detailed information on a particular ProductCode
 func ProductDetails(ProductCode string) (*ProductDetailsResult, error) {
 	req := new(apiRequest)
 	req.result = new(ProductDetailsResult)
@@ -35,6 +39,7 @@ func ProductDetails(ProductCode string) (*ProductDetailsResult, error) {
 	return req.result.(*ProductDetailsResult), err
 }
 
+// Quote allows you to generate an individual real-time quotation
 func Quote(request *QuoteRequest) (*QuoteResult, error) {
 	req := new(apiRequest)
 	req.result = new(QuoteResult)
@@ -44,6 +49,7 @@ func Quote(request *QuoteRequest) (*QuoteResult, error) {
 	return req.result.(*QuoteResult), err
 }
 
+// ValidateCSR allows you to parse and validate a PEM-encoded PKCS#10
 func ValidateCSR(request *ValidateCSRRequest) (*ValidateCSRResult, error) {
 	req := new(apiRequest)
 	req.result = new(ValidateCSRResult)
@@ -53,6 +59,7 @@ func ValidateCSR(request *ValidateCSRRequest) (*ValidateCSRResult, error) {
 	return req.result.(*ValidateCSRResult), err
 }
 
+// UserAgreement fetches the latest subscriber agreement from the CA
 func UserAgreement(ProductCode string) (*UserAgreementResult, error) {
 	req := new(apiRequest)
 	req.result = new(UserAgreementResult)
@@ -64,6 +71,7 @@ func UserAgreement(ProductCode string) (*UserAgreementResult, error) {
 	return req.result.(*UserAgreementResult), err
 }
 
+// ApproverList will fetch a list of valid email addresses for a particular CommonName and ProductCode
 func ApproverList(request *ApproverListRequest) (*ApproverListResult, error) {
 	req := new(apiRequest)
 	req.result = new(ApproverListResult)
@@ -73,6 +81,7 @@ func ApproverList(request *ApproverListRequest) (*ApproverListResult, error) {
 	return req.result.(*ApproverListResult), err
 }
 
+// Order allows you to submit orders for regular certificates as well as S/MIME and AlwaysOnSSL certificates
 func Order(request *OrderRequest) (*OrderResult, error) {
 	req := new(apiRequest)
 	req.result = new(OrderResult)

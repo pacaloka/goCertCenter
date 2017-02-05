@@ -23,8 +23,7 @@ func checkErr(err error) {
 	}
 }
 
-/* Represents an API request
- */
+// Represents an API request
 type apiRequest struct {
 	method     string
 	httpMethod string
@@ -35,8 +34,7 @@ type apiRequest struct {
 	statusCode int
 }
 
-/* ProfileResult represents a GET /Profile response
- */
+// ProfileResult represents a GET /Profile response
 type ProfileResult struct {
 	AuthType        string
 	AuthorizationID int64
@@ -49,8 +47,7 @@ type ProfileResult struct {
 	Timezone        string
 }
 
-/* LimitResult represents a GET /Limit response
- */
+// LimitResult represents a GET /Limit response
 type LimitResult struct {
 	Success   bool `json:"success"`
 	LimitInfo struct {
@@ -59,15 +56,13 @@ type LimitResult struct {
 	}
 }
 
-/* ProductsResult represents a GET /Products response
- */
+// ProductsResult represents a GET /Products response
 type ProductsResult struct {
 	Success  bool `json:"success"`
 	Products []string
 }
 
-/* ProductDetailsResult represents a GET /ProductDetails response
- */
+// ProductDetailsResult represents a GET /ProductDetails response
 type ProductDetailsResult struct {
 	Success        bool `json:"success"`
 	ProductDetails struct {
@@ -89,14 +84,12 @@ type ProductDetailsResult struct {
 	}
 }
 
-/* ProductDetailsRequest represents a GET /ProductDetails request
- */
+// ProductDetailsRequest represents a GET /ProductDetails request
 type ProductDetailsRequest struct {
 	ProductCode string
 }
 
-/* QuoteResult represents a GET /Quote response
- */
+// QuoteResult represents a GET /Quote response
 type QuoteResult struct {
 	Success         bool `json:"success"`
 	Currency        string
@@ -109,8 +102,7 @@ type QuoteResult struct {
 	Price float64
 }
 
-/* QuoteRequest represents a GET /Quote request
- */
+// QuoteRequest represents a GET /Quote request
 type QuoteRequest struct {
 	ProductCode         string
 	SubjectAltNameCount int
@@ -118,8 +110,7 @@ type QuoteRequest struct {
 	ServerCount         int
 }
 
-/* ValidateCSRResult represents a POST /ValidateCSR response
- */
+// ValidateCSRResult represents a POST /ValidateCSR response
 type ValidateCSRResult struct {
 	Success   bool `json:"success"`
 	ParsedCSR struct {
@@ -136,35 +127,30 @@ type ValidateCSRResult struct {
 	}
 }
 
-/* ValidateCSRRequest represents a POST /ValidateCSR request
- */
+// ValidateCSRRequest represents a POST /ValidateCSR request
 type ValidateCSRRequest struct {
 	CSR string // PEM-encoded PKCS#10
 }
 
-/* UserAgreementRequest represents a GET /ProductDetails response
- */
+// UserAgreementRequest represents a GET /ProductDetails response
 type UserAgreementRequest struct {
 	ProductCode string
 }
 
-/* UserAgreementResult represents a GET /ProductDetails request
- */
+// UserAgreementResult represents a GET /ProductDetails request
 type UserAgreementResult struct {
 	Success       bool `json:"success"`
 	ProductCode   string
 	UserAgreement string
 }
 
-/* ApproverListRequest represents a GET /ApproverList response
- */
+// ApproverListRequest represents a GET /ApproverList response
 type ApproverListRequest struct {
 	CommonName  string
 	ProductCode string
 }
 
-/* ApproverListResult represents a GET /ApproverList request
- */
+// ApproverListResult represents a GET /ApproverList request
 type ApproverListResult struct {
 	Success      bool `json:"success"`
 	ApproverList []struct {
@@ -173,8 +159,7 @@ type ApproverListResult struct {
 	}
 }
 
-/* OrderResult represents a POST /Order response
- */
+// OrderResult represents a POST /Order response
 type OrderResult struct {
 	Success           bool `json:"success"`
 	Timestamp         time.Time
@@ -242,8 +227,7 @@ type OrganizationAddress struct {
 	Fax          string `json:",omitempty"`
 }
 
-/* OrderRequest represents a POST /Order request
- */
+// OrderRequest represents a POST /Order request
 type OrderRequest struct {
 	OrganizationInfo struct {
 		OrganizationName    string              `json:",omitempty"`
