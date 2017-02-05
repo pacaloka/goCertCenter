@@ -5,7 +5,7 @@ package main
 
 import (
 	"fmt"
-//	"io/ioutil"
+	"io/ioutil"
 	certcenter "github.com/CertCenter/goCertCenter"
 )
 
