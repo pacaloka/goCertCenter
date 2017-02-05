@@ -56,16 +56,6 @@ func (req *apiRequest)do(apiMethod string, ParamType ...int) (error) {
 	response, err := req.client.Do(request)
 	defer response.Body.Close()
 
-	req.statusCode=response.StatusCode
-	if response.StatusCode != 200 {
-		switch(response.StatusCode) {
-			case 401:
-				return errors.New(fmt.Sprintf("CertCenter API: Autorization failed. Used bearer token is invalid or does not have the proper rights"))
-			default:
-				return errors.New(fmt.Sprintf("CertCenter API: Returned with Status %d", response.StatusCode))
-		}
-	}
-
 	if response.ContentLength>1<<16||response.ContentLength==0 {
 		return errors.New("CertCenter API: Returned content with wired length")
 	}
@@ -75,6 +65,18 @@ func (req *apiRequest)do(apiMethod string, ParamType ...int) (error) {
 
 	}
 	fmt.Println(string(data))
+
+	req.statusCode=response.StatusCode
+	if response.StatusCode != 200 {
+		switch(response.StatusCode) {
+			case 401:
+				return errors.New(fmt.Sprintf("CertCenter API: Autorization failed. Used bearer token is invalid or does not have the proper rights"))
+			case 417:
+				return errors.New(fmt.Sprintf("CertCenter API: Please double check your request data: %s", string(data)))
+			default:
+				return errors.New(fmt.Sprintf("CertCenter API: Returned with Status %d", response.StatusCode))
+		}
+	}
 
 	if err := json.Unmarshal(data, &req.result); err != nil {
 		return err

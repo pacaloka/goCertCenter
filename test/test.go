@@ -2,7 +2,7 @@ package main
 
 import (
 	"fmt"
-//	"io/ioutil"
+	//"io/ioutil"
 	certcenter "../../goCertCenter"
 )
 
@@ -10,33 +10,34 @@ import (
  * 
  */
 func init() {
-	certcenter.Bearer = "ABCDEFGHIJKLMNOP.oauth2.certcenter.com"
+	certcenter.Bearer = "YourValidToken.oauth2.certcenter.com"
 }
 
 func main() {
 
-	// Limit
-	res, _ := certcenter.Limit()
-	fmt.Println(res)
-
 /*
 
-	// Profile
+	// Get my profile information
 	res, _ := certcenter.Profile()
 	fmt.Println(res)
 
 
-	// Products
+	// Inquire limit informations
+	res, _ := certcenter.Limit()
+	fmt.Println(res)
+
+
+	// Get all valid ProductCodes
 	res, _ := certcenter.Products()
 	fmt.Println(res)
 
 
-	// ProductDetails
+	// Inquire details about a product 
 	res, _ := certcenter.ProductDetails("GeoTrust.QuickSSLPremium")
 	fmt.Println(res)
 
 
-	// Quote
+	// Get a Quote
 	res, _ := certcenter.Quote(&certcenter.QuoteRequest{
 		ProductCode: "Symantec.SecureSiteEV",
 		SubjectAltNameCount: 0,
@@ -46,14 +47,54 @@ func main() {
 	fmt.Println(res)
 
 
-	// ValidateCSR
+	// Validate a CSR
 	csr, _ := ioutil.ReadFile("csr")
 	res, _ := certcenter.ValidateCSR(&certcenter.ValidateCSRRequest{
 		CSR: string(csr),
 	})
 	fmt.Println(res)
 
+
+	// Get the CA's User Agreement
+	res, _ := certcenter.UserAgreement("Symantec.SecureSite")
+	fmt.Println(res)
+
+
+	// Get valid email addresses for email based DV validation
+	res, _ := certcenter.ApproverList(&certcenter.ApproverListRequest{
+		CommonName: "www.example.com",
+		ProductCode: "GeoTrust.QuickSSLPremium",
+	})
+	fmt.Println(res)
+
+
+	// Order a certificate
+	csr, _ := ioutil.ReadFile("csr")
+	res, _ := certcenter.Order(&certcenter.OrderRequest{
+			OrderParameters: certcenter.OrderParameters{
+				ProductCode: "RapidSSL.RapidSSL",
+				CSR: string(csr),
+				ValidityPeriod: 24,
+				ApproverEmail:"domains@certcenter.com",
+			},
+			AdminContact: certcenter.Contact{
+				FirstName: "John",
+				LastName: "Doe",
+				Phone: "+1 212 999 999",
+				Email: "john.doe@example.com",
+			},
+			TechContact: certcenter.Contact{
+				FirstName: "John",
+				LastName: "Doe",
+				Phone: "+1 212 999 999",
+				Email: "john.doe@example.com",
+			},
+		},
+	)
+	fmt.Println(res)
 */
 
+
+	fmt.Println("")
 	return 
 }

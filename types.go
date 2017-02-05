@@ -3,6 +3,7 @@ package certcenter
 import (
 	"fmt"
 	"net/http"
+	"time"
 )
 
 var Bearer string
@@ -135,9 +136,115 @@ type ValidateCSRResult struct {
 /* Represents a POST /ValidateCSR request
 */
 type ValidateCSRRequest struct {
-	CSR string
+	CSR string	// PEM-encoded PKCS#10
 }
 
+/* Represents a GET /ProductDetails response
+*/
+type UserAgreementRequest struct {
+	ProductCode string
+}
 
+/* Represents a GET /ProductDetails request
+*/
+type UserAgreementResult struct {
+	Success bool`json:"success"`
+	ProductCode string
+	UserAgreement string
+}
 
+/* Represents a GET /ApproverList response
+*/
+type ApproverListRequest struct {
+	CommonName string
+	ProductCode string
+}
 
+/* Represents a GET /ApproverList request
+*/
+type ApproverListResult struct {
+	Success bool`json:"success"`
+	ApproverList []struct {
+		ApproverEmail string
+		ApproverType string // Domain, Generic
+	}
+}
+
+/* Represents a POST /Order response
+*/
+type OrderResult struct {
+	Success bool`json:"success"`
+	Timestamp time.Time
+	CertCenterOrderID int
+	OrderParameters struct {
+		CSR string // PEM-encoded PKCS#10
+		IsCompetitiveUpgrade bool
+		IsRenewal bool
+		PartnerOrderID string
+		ProductCode string
+		ServerCount int
+		SignatureHashAlgorithm string
+		SubjectAltNameCount int
+		SubjectAltNames []string
+		ValidityPeriod int // 12 or 24 month (days for AlwaysOnSSL, min. 180, max. 365)
+		// AlwaysOnSSL (Symantec Encryption Everywhere) only:
+		DVAuthMethod string // DNS, EMAIL
+
+	}
+	// AlwaysOnSSL (Symantec Encryption Everywhere) only:
+	Fulfillment struct {
+		Certificate string
+		Certificate_PKCS7 string
+		Intermediate string
+
+	}
+}
+
+type OrderParameters struct {
+		CSR string // PEM-encoded PKCS#10
+		IsCompetitiveUpgrade bool`json:",omitempty"`
+		IsRenewal bool`json:",omitempty"`
+		PartnerOrderID string`json:",omitempty"`
+		ProductCode string`json:",omitempty"`
+		ServerCount int`json:",omitempty"`
+		SignatureHashAlgorithm string`json:",omitempty"`
+		SubjectAltNameCount int`json:",omitempty"`
+		SubjectAltNames []string`json:",omitempty"`
+		ValidityPeriod int`json:",omitempty"` // 12 or 24 month (days for AlwaysOnSSL, min. 180, max. 365)
+		// AlwaysOnSSL (Symantec Encryption Everywhere) only:
+		DVAuthMethod string`json:",omitempty"` // DNS, EMAIL
+		ApproverEmail string`json:",omitempty"`
+}
+
+type Contact struct {
+	Title string`json:",omitempty"`
+	FirstName string`json:",omitempty"`
+	LastName string`json:",omitempty"`
+	OrganizationName string`json:",omitempty"`
+	OrganizationAddress OrganizationAddress`json:",omitempty"`
+	Phone string`json:",omitempty"`
+	Fax string`json:",omitempty"`
+	Email string`json:",omitempty"`
+}
+
+type OrganizationAddress struct {
+	AddressLine1 string`json:",omitempty"`
+	PostalCode string`json:",omitempty"`
+	City string`json:",omitempty"`
+	Region string`json:",omitempty"`
+	Country string`json:",omitempty"`
+	Phone string`json:",omitempty"`
+	Fax string`json:",omitempty"`
+}
+
+/* Represents a POST /Order request
+*/
+type OrderRequest struct {
+	OrganizationInfo struct {
+		OrganizationName string`json:",omitempty"`
+		OrganizationAddress OrganizationAddress`json:",omitempty"`
+	}`json:",omitempty"`
+	OrderParameters OrderParameters`json:",omitempty"`
+	AdminContact Contact`json:",omitempty"`
+	TechContact Contact`json:",omitempty"`
+}

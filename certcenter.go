@@ -53,4 +53,31 @@ func ValidateCSR(request *ValidateCSRRequest) (*ValidateCSRResult, error) {
 	return req.result.(*ValidateCSRResult), err
 }
 
+func UserAgreement(ProductCode string) (*UserAgreementResult, error) {
+	req := new(apiRequest)
+	req.result = new(UserAgreementResult)
+	req.request = &UserAgreementRequest{
+		ProductCode: ProductCode,
+	}
+	err:=req.do("UserAgreement", CC_PARAM_TYPE_QS)
+	checkErr(err)
+	return req.result.(*UserAgreementResult), err
+}
 
+func ApproverList(request *ApproverListRequest) (*ApproverListResult, error) {
+	req := new(apiRequest)
+	req.result = new(ApproverListResult)
+	req.request = request
+	err:=req.do("ApproverList", CC_PARAM_TYPE_QS)
+	checkErr(err)
+	return req.result.(*ApproverListResult), err
+}
+
+func Order(request *OrderRequest) (*OrderResult, error) {
+	req := new(apiRequest)
+	req.result = new(OrderResult)
+	req.request = request
+	err:=req.do("Order", CC_PARAM_TYPE_BODY)
+	checkErr(err)
+	return req.result.(*OrderResult), err
+}
