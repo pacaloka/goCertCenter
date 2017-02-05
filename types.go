@@ -43,7 +43,7 @@ type ProfileResult struct {
 	Currency        string
 	CustomerID      int64
 	Locale          string
-	OAuth2Token     string `json:"OAuth2Token"`
+	OAuth2Token     string `json:"OAuth2_Token"`
 	Scope           string
 	Timezone        string
 }
