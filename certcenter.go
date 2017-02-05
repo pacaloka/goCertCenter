@@ -18,7 +18,7 @@ func Limit() (*LimitResult, error) {
 	return req.result.(*LimitResult), err
 }
 
-// Products allows you to fetch a list of valid ProductCodes 
+// Products allows you to fetch a list of valid ProductCodes
 func Products() (*ProductsResult, error) {
 	req := new(apiRequest)
 	req.result = new(ProductsResult)

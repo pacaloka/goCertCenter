@@ -187,7 +187,7 @@ type OrderResult struct {
 	}
 }
 
-// OrderParameters represents generic Order Parameters 
+// OrderParameters represents generic Order Parameters
 type OrderParameters struct {
 	CSR                    string   // PEM-encoded PKCS#10
 	IsCompetitiveUpgrade   bool     `json:",omitempty"`
