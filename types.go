@@ -182,9 +182,9 @@ type OrderResult struct {
 	}
 	// AlwaysOnSSL (Symantec Encryption Everywhere) only:
 	Fulfillment struct {
-		Certificate       string
-		Certificate_PKCS7 string
-		Intermediate      string
+		Certificate  string
+		PKCS7        string `json:"Certificate_PKCS7"`
+		Intermediate string
 	}
 }
 
