@@ -10,7 +10,7 @@ import (
  * 
  */
 func init() {
-	certcenter.Bearer = "YourValidToken.oauth2.certcenter.com"
+	certcenter.Bearer = "YOURTOKEN.oauth2.certcenter.com"
 }
 
 func main() {
