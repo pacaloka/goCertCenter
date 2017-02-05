@@ -9,8 +9,11 @@ import (
 var Bearer string
 
 const (
+	// Param type is QueryString (eg. ?CertCenterOrderId=123)
 	CC_PARAM_TYPE_QS = 1 << iota
+	// Param type is Path (eg. /:CertCenterOrderId/)
 	CC_PARAM_TYPE_PATH
+	// Param type is Body (JSON POST)
 	CC_PARAM_TYPE_BODY
 )
 
@@ -32,7 +35,7 @@ type apiRequest struct {
 	statusCode int
 }
 
-/* Represents a GET /Profile response
+/* ProfileResult represents a GET /Profile response
  */
 type ProfileResult struct {
 	AuthType        string
@@ -46,7 +49,7 @@ type ProfileResult struct {
 	Timezone        string
 }
 
-/* Represents a GET /Limit response
+/* LimitResult represents a GET /Limit response
  */
 type LimitResult struct {
 	Success   bool `json:"success"`
@@ -56,14 +59,14 @@ type LimitResult struct {
 	}
 }
 
-/* Represents a GET /Products response
+/* ProductsResult represents a GET /Products response
  */
 type ProductsResult struct {
 	Success  bool `json:"success"`
 	Products []string
 }
 
-/* Represents a GET /ProductDetails response
+/* ProductDetailsResult represents a GET /ProductDetails response
  */
 type ProductDetailsResult struct {
 	Success        bool `json:"success"`
@@ -86,13 +89,13 @@ type ProductDetailsResult struct {
 	}
 }
 
-/* Represents a GET /ProductDetails request
+/* ProductDetailsRequest represents a GET /ProductDetails request
  */
 type ProductDetailsRequest struct {
 	ProductCode string
 }
 
-/* Represents a GET /Quote response
+/* QuoteResult represents a GET /Quote response
  */
 type QuoteResult struct {
 	Success         bool `json:"success"`
@@ -106,7 +109,7 @@ type QuoteResult struct {
 	Price float64
 }
 
-/* Represents a GET /Quote request
+/* QuoteRequest represents a GET /Quote request
  */
 type QuoteRequest struct {
 	ProductCode         string
@@ -115,7 +118,7 @@ type QuoteRequest struct {
 	ServerCount         int
 }
 
-/* Represents a POST /ValidateCSR response
+/* ValidateCSRResult represents a POST /ValidateCSR response
  */
 type ValidateCSRResult struct {
 	Success   bool `json:"success"`
@@ -133,19 +136,19 @@ type ValidateCSRResult struct {
 	}
 }
 
-/* Represents a POST /ValidateCSR request
+/* ValidateCSRRequest represents a POST /ValidateCSR request
  */
 type ValidateCSRRequest struct {
 	CSR string // PEM-encoded PKCS#10
 }
 
-/* Represents a GET /ProductDetails response
+/* UserAgreementRequest represents a GET /ProductDetails response
  */
 type UserAgreementRequest struct {
 	ProductCode string
 }
 
-/* Represents a GET /ProductDetails request
+/* UserAgreementResult represents a GET /ProductDetails request
  */
 type UserAgreementResult struct {
 	Success       bool `json:"success"`
@@ -153,14 +156,14 @@ type UserAgreementResult struct {
 	UserAgreement string
 }
 
-/* Represents a GET /ApproverList response
+/* ApproverListRequest represents a GET /ApproverList response
  */
 type ApproverListRequest struct {
 	CommonName  string
 	ProductCode string
 }
 
-/* Represents a GET /ApproverList request
+/* ApproverListResult represents a GET /ApproverList request
  */
 type ApproverListResult struct {
 	Success      bool `json:"success"`
@@ -170,7 +173,7 @@ type ApproverListResult struct {
 	}
 }
 
-/* Represents a POST /Order response
+/* OrderResult represents a POST /Order response
  */
 type OrderResult struct {
 	Success           bool `json:"success"`
@@ -199,6 +202,7 @@ type OrderResult struct {
 	}
 }
 
+// OrderParameters represents generic Order Parameters 
 type OrderParameters struct {
 	CSR                    string   // PEM-encoded PKCS#10
 	IsCompetitiveUpgrade   bool     `json:",omitempty"`
@@ -215,6 +219,7 @@ type OrderParameters struct {
 	ApproverEmail string `json:",omitempty"`
 }
 
+// Contact represents a generic Contact type (for AdminContact and TechContact)
 type Contact struct {
 	Title               string              `json:",omitempty"`
 	FirstName           string              `json:",omitempty"`
@@ -226,6 +231,7 @@ type Contact struct {
 	Email               string              `json:",omitempty"`
 }
 
+// OrganizationAddress holds general information about a organization
 type OrganizationAddress struct {
 	AddressLine1 string `json:",omitempty"`
 	PostalCode   string `json:",omitempty"`
@@ -236,7 +242,7 @@ type OrganizationAddress struct {
 	Fax          string `json:",omitempty"`
 }
 
-/* Represents a POST /Order request
+/* OrderRequest represents a POST /Order request
  */
 type OrderRequest struct {
 	OrganizationInfo struct {
