@@ -19,10 +19,12 @@ func checkErr(err error) {
 	} 
 }
 
-/* Represents a API request
+/* Represents an API request
 */
 type apiRequest struct {
 	method string
+	httpMethod string
+	url string
 	result interface{}
 	request interface{}
 	client *http.Client
@@ -112,6 +114,29 @@ type QuoteRequest struct {
 	ServerCount int
 }
 
+/* Represents a POST /ValidateCSR response
+*/
+type ValidateCSRResult struct {
+	Success bool`json:"success"`
+	ParsedCSR struct {
+		CommonName string
+		Organization string
+		OrganizationUnit string
+		Email string
+		State string
+		Locality string
+		Country string
+		KeyLength int
+		SignaturAlgorithm string
+		KeyEncryptionAlgorithm string
+	}
+}
+
+/* Represents a POST /ValidateCSR request
+*/
+type ValidateCSRRequest struct {
+	CSR string
+}
 
 
 

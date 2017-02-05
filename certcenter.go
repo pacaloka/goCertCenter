@@ -27,7 +27,6 @@ func Products() (*ProductsResult, error) {
 func ProductDetails(ProductCode string) (*ProductDetailsResult, error) {
 	req := new(apiRequest)
 	req.result = new(ProductDetailsResult)
-	req.request = new(ProductDetailsRequest)
 	req.request = &ProductDetailsRequest{
 		ProductCode: ProductCode,
 	}
@@ -45,6 +44,13 @@ func Quote(request *QuoteRequest) (*QuoteResult, error) {
 	return req.result.(*QuoteResult), err
 }
 
-
+func ValidateCSR(request *ValidateCSRRequest) (*ValidateCSRResult, error) {
+	req := new(apiRequest)
+	req.result = new(ValidateCSRResult)
+	req.request = request
+	err:=req.do("ValidateCSR", CC_PARAM_TYPE_BODY)
+	checkErr(err)
+	return req.result.(*ValidateCSRResult), err
+}
 
 

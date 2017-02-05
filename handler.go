@@ -1,8 +1,10 @@
 package certcenter
 
 import (
+	"io"
 	"fmt"
 	"errors"
+	"strings"
 	"net/http"
 	"crypto/tls"
 	"io/ioutil"
@@ -13,7 +15,11 @@ import (
 
 func (req *apiRequest)do(apiMethod string, ParamType ...int) (error) {
 
+	var postData io.Reader
+	paramType := CC_PARAM_TYPE_QS
+	req.httpMethod = "GET"
 	req.method=apiMethod
+	req.url = "https://api.certcenter.com/rest/v1/"+req.method
 	req.client=&http.Client{
 			Transport: &http.Transport{
 					TLSClientConfig: &tls.Config{
@@ -23,20 +29,30 @@ func (req *apiRequest)do(apiMethod string, ParamType ...int) (error) {
 			},
 	}
 
-	url := "https://api.certcenter.com/rest/v1/"+req.method
 	if len(ParamType)>0 {
-		if ParamType[0] == CC_PARAM_TYPE_QS {
-			v, _ := query.Values(req.request)
-			url += "?"+v.Encode()
-			fmt.Println(url)
+		paramType = ParamType[0]
+		switch(paramType) {
+			case CC_PARAM_TYPE_QS:
+				v, err := query.Values(req.request); if err!=nil {
+					return err
+				}
+				req.url += "?"+v.Encode()
+			case CC_PARAM_TYPE_BODY:
+				req.httpMethod = "POST"
+				d, err := json.Marshal(req.request); if err!=nil {
+					return err
+				}
+				postData = strings.NewReader(string(d))
 		}
 	}
-	request, err := http.NewRequest("GET", url, nil)
-	if err != nil {
+
+	request, err := http.NewRequest(req.httpMethod, req.url, postData); if err != nil {
 		return err
 	}
 
 	request.Header.Add("Authorization", "Bearer "+Bearer)
+	request.Header.Set("Content-Type","application/json; charset=utf8")
+
 	response, err := req.client.Do(request)
 	defer response.Body.Close()
 
@@ -58,6 +74,7 @@ func (req *apiRequest)do(apiMethod string, ParamType ...int) (error) {
 		return err
 
 	}
+	fmt.Println(string(data))
 
 	if err := json.Unmarshal(data, &req.result); err != nil {
 		return err
