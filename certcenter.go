@@ -1,6 +1,7 @@
 package certcenter
 
 // Profile fetches basic informations about your profile
+//
 func Profile() (*ProfileResult, error) {
 	req := new(apiRequest)
 	req.result = new(ProfileResult)
@@ -10,6 +11,7 @@ func Profile() (*ProfileResult, error) {
 }
 
 // Limit inquires information about your current limit and used amount
+//
 func Limit() (*LimitResult, error) {
 	req := new(apiRequest)
 	req.result = new(LimitResult)
@@ -19,6 +21,7 @@ func Limit() (*LimitResult, error) {
 }
 
 // Products allows you to fetch a list of valid ProductCodes
+//
 func Products() (*ProductsResult, error) {
 	req := new(apiRequest)
 	req.result = new(ProductsResult)
@@ -28,6 +31,7 @@ func Products() (*ProductsResult, error) {
 }
 
 // ProductDetails inquires detailed information on a particular ProductCode
+//
 func ProductDetails(ProductCode string) (*ProductDetailsResult, error) {
 	req := new(apiRequest)
 	req.result = new(ProductDetailsResult)
@@ -40,6 +44,7 @@ func ProductDetails(ProductCode string) (*ProductDetailsResult, error) {
 }
 
 // Quote allows you to generate an individual real-time quotation
+//
 func Quote(request *QuoteRequest) (*QuoteResult, error) {
 	req := new(apiRequest)
 	req.result = new(QuoteResult)
@@ -50,6 +55,7 @@ func Quote(request *QuoteRequest) (*QuoteResult, error) {
 }
 
 // ValidateCSR allows you to parse and validate a PEM-encoded PKCS#10
+//
 func ValidateCSR(request *ValidateCSRRequest) (*ValidateCSRResult, error) {
 	req := new(apiRequest)
 	req.result = new(ValidateCSRResult)
@@ -60,6 +66,7 @@ func ValidateCSR(request *ValidateCSRRequest) (*ValidateCSRResult, error) {
 }
 
 // UserAgreement fetches the latest subscriber agreement from the CA
+//
 func UserAgreement(ProductCode string) (*UserAgreementResult, error) {
 	req := new(apiRequest)
 	req.result = new(UserAgreementResult)
@@ -71,7 +78,8 @@ func UserAgreement(ProductCode string) (*UserAgreementResult, error) {
 	return req.result.(*UserAgreementResult), err
 }
 
-// ApproverList will fetch a list of valid email addresses for a particular CommonName and ProductCode
+// ApproverList will fetch a list of valid email addresses
+// for a particular CommonName and ProductCode
 func ApproverList(request *ApproverListRequest) (*ApproverListResult, error) {
 	req := new(apiRequest)
 	req.result = new(ApproverListResult)
@@ -81,7 +89,9 @@ func ApproverList(request *ApproverListRequest) (*ApproverListResult, error) {
 	return req.result.(*ApproverListResult), err
 }
 
-// Order allows you to submit orders for regular certificates as well as S/MIME and AlwaysOnSSL certificates
+// Order allows you to submit orders for regular certificates
+// as well as S/MIME and AlwaysOnSSL certificates
+//
 func Order(request *OrderRequest) (*OrderResult, error) {
 	req := new(apiRequest)
 	req.result = new(OrderResult)
@@ -92,6 +102,7 @@ func Order(request *OrderRequest) (*OrderResult, error) {
 }
 
 // PutApproverEmail allows you to reset the email address of the approver
+//
 func PutApproverEmail(request *PutApproverEmailRequest) (*PutApproverEmailResult, error) {
 	req := new(apiRequest)
 	req.result = new(PutApproverEmailResult)
@@ -102,6 +113,7 @@ func PutApproverEmail(request *PutApproverEmailRequest) (*PutApproverEmailResult
 }
 
 // ResendApproverEmail allows you to resend the approver email to the approvers address
+//
 func ResendApproverEmail(request *ResendApproverEmailRequest) (*ResendApproverEmailResult, error) {
 	req := new(apiRequest)
 	req.result = new(ResendApproverEmailResult)
@@ -111,12 +123,36 @@ func ResendApproverEmail(request *ResendApproverEmailRequest) (*ResendApproverEm
 	return req.result.(*ResendApproverEmailResult), err
 }
 
-// Orders gives you the capability to query and filter your orders
-func Orders(request *OrdersRequest) (*OrdersResult, error) {
+// GetOrders gives you the capability to query and filter your orders
+//
+func GetOrders(request *GetOrdersRequest) (*GetOrdersResult, error) {
 	req := new(apiRequest)
-	req.result = new(OrdersResult)
+	req.result = new(GetOrdersResult)
 	req.request = request
 	err := req.do("Orders", CC_PARAM_TYPE_QS)
 	checkErr(err)
-	return req.result.(*OrdersResult), err
+	return req.result.(*GetOrdersResult), err
+}
+
+// GetOrder gives you the capability to query a particular order
+//
+func GetOrder(request *GetOrderRequest) (*GetOrderResult, error) {
+	req := new(apiRequest)
+	req.result = new(GetOrderResult)
+	req.request = request
+	err := req.do("Order", CC_PARAM_TYPE_QS|CC_PARAM_TYPE_PATH)
+	checkErr(err)
+	return req.result.(*GetOrderResult), err
+}
+
+// ModifiedOrders fetches modified orders. You can provide
+// a timespan to specify which changes your're interested in
+//
+func GetModifiedOrders(request *GetModifiedOrdersRequest) (*GetModifiedOrdersResult, error) {
+	req := new(apiRequest)
+	req.result = new(GetModifiedOrdersResult)
+	req.request = request
+	err := req.do("GetModifiedOrders", CC_PARAM_TYPE_QS)
+	checkErr(err)
+	return req.result.(*GetModifiedOrdersResult), err
 }

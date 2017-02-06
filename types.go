@@ -35,6 +35,13 @@ type apiRequest struct {
 	statusCode int
 }
 
+type BasicResultInfo struct {
+	Success bool `json:"success"`
+	Message string
+	// if !Success, ErrorId may be provided
+	ErrorId int
+}
+
 // ProfileResult represents a GET /Profile response
 type ProfileResult struct {
 	AuthType        string
@@ -50,7 +57,7 @@ type ProfileResult struct {
 
 // LimitResult represents a GET /Limit response
 type LimitResult struct {
-	Success   bool `json:"success"`
+	BasicResultInfo
 	LimitInfo struct {
 		Limit float64
 		Used  float64
@@ -59,13 +66,13 @@ type LimitResult struct {
 
 // ProductsResult represents a GET /Products response
 type ProductsResult struct {
-	Success  bool `json:"success"`
+	BasicResultInfo
 	Products []string
 }
 
 // ProductDetailsResult represents a GET /ProductDetails response
 type ProductDetailsResult struct {
-	Success        bool `json:"success"`
+	BasicResultInfo
 	ProductDetails struct {
 		CA                string
 		Currency          string
@@ -92,7 +99,7 @@ type ProductDetailsRequest struct {
 
 // QuoteResult represents a GET /Quote response
 type QuoteResult struct {
-	Success         bool `json:"success"`
+	BasicResultInfo
 	Currency        string
 	OrderParameters struct {
 		ProductCode         string
@@ -113,7 +120,7 @@ type QuoteRequest struct {
 
 // ValidateCSRResult represents a POST /ValidateCSR response
 type ValidateCSRResult struct {
-	Success   bool `json:"success"`
+	BasicResultInfo
 	ParsedCSR struct {
 		CommonName             string
 		Organization           string
@@ -140,7 +147,7 @@ type UserAgreementRequest struct {
 
 // UserAgreementResult represents a GET /ProductDetails request
 type UserAgreementResult struct {
-	Success       bool `json:"success"`
+	BasicResultInfo
 	ProductCode   string
 	UserAgreement string
 }
@@ -153,7 +160,7 @@ type ApproverListRequest struct {
 
 // ApproverListResult represents a GET /ApproverList request
 type ApproverListResult struct {
-	Success      bool `json:"success"`
+	BasicResultInfo
 	ApproverList []struct {
 		ApproverEmail string
 		ApproverType  string // Domain, Generic
@@ -162,7 +169,7 @@ type ApproverListResult struct {
 
 // OrderResult represents a POST /Order response
 type OrderResult struct {
-	Success           bool `json:"success"`
+	BasicResultInfo
 	Timestamp         time.Time
 	CertCenterOrderID int64
 	OrderParameters   struct {
@@ -175,10 +182,8 @@ type OrderResult struct {
 		SignatureHashAlgorithm string
 		SubjectAltNameCount    int
 		SubjectAltNames        []string
-		ValidityPeriod         int // 12 or 24 month (days for AlwaysOnSSL, min. 180, max. 365)
-		// AlwaysOnSSL (Symantec Encryption Everywhere) only:
-		DVAuthMethod string // DNS, EMAIL
-
+		ValidityPeriod         int    // 12 or 24 month (days for AlwaysOnSSL, min. 180, max. 365)
+		DVAuthMethod           string // DNS, EMAIL
 	}
 	// AlwaysOnSSL (Symantec Encryption Everywhere) only:
 	Fulfillment struct {
@@ -200,9 +205,8 @@ type OrderParameters struct {
 	SubjectAltNameCount    int      `json:",omitempty"`
 	SubjectAltNames        []string `json:",omitempty"`
 	ValidityPeriod         int      `json:",omitempty"` // 12 or 24 month (days for AlwaysOnSSL, min. 180, max. 365)
-	// AlwaysOnSSL (Symantec Encryption Everywhere) only:
-	DVAuthMethod  string `json:",omitempty"` // DNS, EMAIL
-	ApproverEmail string `json:",omitempty"`
+	DVAuthMethod           string   `json:",omitempty"` // DNS, EMAIL
+	ApproverEmail          string   `json:",omitempty"`
 }
 
 // Contact represents a generic Contact type (for AdminContact and TechContact)
@@ -241,10 +245,7 @@ type OrderRequest struct {
 
 // PutApproverEmailResult represents a PUT /ApproverEmail response
 type PutApproverEmailResult struct {
-	Success bool `json:"success"`
-	Message string
-	// if !Success, ErrorId may be provided
-	ErrorId int
+	BasicResultInfo
 }
 
 // PutApproverEmailRequest represents a PUT /ApproverEmail request
@@ -255,10 +256,7 @@ type PutApproverEmailRequest struct {
 
 // ResendApproverEmailResult represents a POST /ApproverEmail response
 type ResendApproverEmailResult struct {
-	Success bool `json:"success"`
-	Message string
-	// if !Success, ErrorId may be provided
-	ErrorId int
+	BasicResultInfo
 }
 
 // ResendApproverEmailRequest represents a POST /ApproverEmail request
@@ -279,7 +277,7 @@ type OrderInfo struct {
 		EndDate     time.Time
 		Progress    int
 	}
-	ConfigurationAssessment struct {
+	ConfigurationAssessment struct { // done by ssllabs.com
 		Engine          string
 		Ranking         string
 		Effective       time.Time
@@ -289,7 +287,7 @@ type OrderInfo struct {
 		Price      float32
 		Currency   string
 		Status     string
-		InvoiceRef string // if available
+		InvoiceRef string // if available (Status == cleared)
 	}
 	OrderParameters struct {
 		PartnerOrderID  string
@@ -340,9 +338,9 @@ type OrderInfo struct {
 	}
 }
 
-// OrdersResult represents a GET /Orders response
-type OrdersResult struct {
-	Success    bool `json:"success"`
+// GetOrdersResult represents a GET /Orders response
+type GetOrdersResult struct {
+	BasicResultInfo
 	OrderInfos []OrderInfo
 	Meta       struct {
 		ItemsAvailable int64
@@ -356,14 +354,47 @@ type OrdersResult struct {
 	} `json:"_meta"`
 }
 
-// OrdersRequest represents a GET /Orders request
-type OrdersRequest struct {
+// GetOrdersRequest represents a GET /Orders request
+type GetOrdersRequest struct {
 	Status                   string
 	ProductType              string
 	CommonName               string
-	IncludeFulfillment       bool `url:"includeFulfillment,omitempty"`
-	IncludeOrderParameters   bool `url:"includeOrderParameters,omitempty"`
-	IncludeBillingDetails    bool `url:"includeBillingDetails,omitempty"`
-	IncludeContacts          bool `url:"includeContacts,omitempty"`
-	IncludeOrganizationInfos bool `url:"includeOrganizationInfos,omitempty"`
+	IncludeFulfillment       bool `url:"includeFulfillment"`
+	IncludeOrderParameters   bool `url:"includeOrderParameters"`
+	IncludeBillingDetails    bool `url:"includeBillingDetails"`
+	IncludeContacts          bool `url:"includeContacts"`
+	IncludeOrganizationInfos bool `url:"includeOrganizationInfos"`
+}
+
+// GetModifiedOrdersResult represents a GET /ModifiedOrders response
+type GetModifiedOrdersResult struct {
+	OrderInfos []OrderInfo
+	BasicResultInfo
+}
+
+// GetModifiedOrdersRequest represents a GET /ModifiedOrders request
+type GetModifiedOrdersRequest struct {
+	FromDate                 time.Time
+	ToDate                   time.Time
+	IncludeFulfillment       bool `url:"includeFulfillment"`
+	IncludeOrderParameters   bool `url:"includeOrderParameters"`
+	IncludeBillingDetails    bool `url:"includeBillingDetails"`
+	IncludeContacts          bool `url:"includeContacts"`
+	IncludeOrganizationInfos bool `url:"includeOrganizationInfos"`
+}
+
+// GetOrderResult represents a GET /Order/:CertCenterOrderID response
+type GetOrderResult struct {
+	BasicResultInfo
+	OrderInfo OrderInfo
+}
+
+// GetOrderRequest represents a GET /Order/:CertCenterOrderID request
+type GetOrderRequest struct {
+	CertCenterOrderID        int64
+	IncludeFulfillment       bool `url:"includeFulfillment"`
+	IncludeOrderParameters   bool `url:"includeOrderParameters"`
+	IncludeBillingDetails    bool `url:"includeBillingDetails"`
+	IncludeContacts          bool `url:"includeContacts"`
+	IncludeOrganizationInfos bool `url:"includeOrganizationInfos"`
 }

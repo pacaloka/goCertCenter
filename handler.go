@@ -10,7 +10,6 @@ import (
 	"io/ioutil"
 	"net/http"
 	"strings"
-	// original: "github.com/google/go-querystring/query"
 )
 
 func (req *apiRequest) do(apiMethod string, ParamType ...int) error {
@@ -59,11 +58,20 @@ func (req *apiRequest) do(apiMethod string, ParamType ...int) error {
 					req.url,
 					req.request.(*PutApproverEmailRequest).CertCenterOrderID,
 					req.request.(*PutApproverEmailRequest).ApproverEmail)
+			} else if apiMethod == "Order" {
+				v, err := query.Values(req.request)
+				if err != nil {
+					return err
+				}
+				req.url += fmt.Sprintf("/%d?", req.request.(*GetOrderRequest).CertCenterOrderID)
+				x := v.Encode()
+				fmt.Println(x)
+				req.url += x
 			}
 		}
 	}
 
-	//fmt.Println(req.url)
+	fmt.Println(req.url)
 
 	request, err := http.NewRequest(req.httpMethod, req.url, postData)
 	if err != nil {
@@ -76,7 +84,7 @@ func (req *apiRequest) do(apiMethod string, ParamType ...int) error {
 	response, err := req.client.Do(request)
 	defer response.Body.Close()
 
-	if response.ContentLength > 1<<16 || response.ContentLength == 0 {
+	if response.ContentLength > 1<<24 || response.ContentLength == 0 {
 		return errors.New("CertCenter API: Returned content with wired length")
 	}
 
@@ -85,17 +93,18 @@ func (req *apiRequest) do(apiMethod string, ParamType ...int) error {
 		return err
 
 	}
+
 	fmt.Println(string(data))
 
 	req.statusCode = response.StatusCode
 	if response.StatusCode != 200 {
 		switch response.StatusCode {
+		default:
+			return fmt.Errorf("CertCenter API: Returned with Status %d", response.StatusCode)
 		case 401:
 			return fmt.Errorf("CertCenter API: Autorization failed. Used bearer token is invalid or does not have the proper rights")
 		case 417: // Invalid Request Data
 		case 406: // No Changes Made
-		default:
-			return fmt.Errorf("CertCenter API: Returned with Status %d", response.StatusCode)
 		}
 	}
 
