@@ -90,3 +90,33 @@ func Order(request *OrderRequest) (*OrderResult, error) {
 	checkErr(err)
 	return req.result.(*OrderResult), err
 }
+
+// PutApproverEmail allows you to reset the email address of the approver
+func PutApproverEmail(request *PutApproverEmailRequest) (*PutApproverEmailResult, error) {
+	req := new(apiRequest)
+	req.result = new(PutApproverEmailResult)
+	req.request = request
+	err := req.do("ApproverEmail", CC_PARAM_TYPE_QS|CC_PARAM_TYPE_PATH)
+	checkErr(err)
+	return req.result.(*PutApproverEmailResult), err
+}
+
+// ResendApproverEmail allows you to resend the approver email to the approvers address
+func ResendApproverEmail(request *ResendApproverEmailRequest) (*ResendApproverEmailResult, error) {
+	req := new(apiRequest)
+	req.result = new(ResendApproverEmailResult)
+	req.request = request
+	err := req.do("ApproverEmail", CC_PARAM_TYPE_PATH)
+	checkErr(err)
+	return req.result.(*ResendApproverEmailResult), err
+}
+
+// Orders gives you the capability to query and filter your orders
+func Orders(request *OrdersRequest) (*OrdersResult, error) {
+	req := new(apiRequest)
+	req.result = new(OrdersResult)
+	req.request = request
+	err := req.do("Orders", CC_PARAM_TYPE_QS)
+	checkErr(err)
+	return req.result.(*OrdersResult), err
+}

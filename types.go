@@ -164,7 +164,7 @@ type ApproverListResult struct {
 type OrderResult struct {
 	Success           bool `json:"success"`
 	Timestamp         time.Time
-	CertCenterOrderID int
+	CertCenterOrderID int64
 	OrderParameters   struct {
 		CSR                    string // PEM-encoded PKCS#10
 		IsCompetitiveUpgrade   bool
@@ -237,4 +237,133 @@ type OrderRequest struct {
 	OrderParameters OrderParameters `json:",omitempty"`
 	AdminContact    Contact         `json:",omitempty"`
 	TechContact     Contact         `json:",omitempty"`
+}
+
+// PutApproverEmailRequest represents a PUT /ApproverEmail response
+type PutApproverEmailResult struct {
+	Success bool `json:"success"`
+	Message string
+	// if !Success, ErrorId may be provided
+	ErrorId int
+}
+
+// PutApproverEmailRequest represents a PUT /ApproverEmail request
+type PutApproverEmailRequest struct {
+	CertCenterOrderID int64
+	ApproverEmail     string
+}
+
+// ResendApproverEmailResult represents a POST /ApproverEmail response
+type ResendApproverEmailResult struct {
+	Success bool `json:"success"`
+	Message string
+	// if !Success, ErrorId may be provided
+	ErrorId int
+}
+
+// ResendApproverEmailRequest represents a POST /ApproverEmail request
+type ResendApproverEmailRequest struct {
+	CertCenterOrderID int64
+}
+
+// OrderInfo contains all information about a certain order
+type OrderInfo struct {
+	CertCenterOrderID int64
+	CommonName        string
+	OrderStatus       struct {
+		MajorStatus string
+		MinorStatus string
+		OrderDate   time.Time
+		UpdateDate  time.Time
+		StartDate   time.Time
+		EndDate     time.Time
+		Progress    int
+	}
+	ConfigurationAssessment struct {
+		Engine          string
+		Ranking         string
+		Effective       time.Time
+		CriteriaVersion string
+	}
+	BillingInfo struct {
+		Price      float32
+		Currency   string
+		Status     string
+		InvoiceRef string // if available
+	}
+	OrderParameters struct {
+		PartnerOrderID  string
+		ValidityPeriod  int
+		ServerCount     int32
+		ProductCode     string
+		DVAuthMethod    string // DV certificates only
+		SubjectAltNames []string
+	}
+	ContactInfo struct { // if includeContacts
+		AdminContact Contact
+		TechContact  Contact
+	}
+	OrganizationInfo struct { // if !DV
+		OrganizationName    string
+		OrganizationAddress OrganizationAddress
+	}
+	Fulfillment struct {
+		StartDate     time.Time
+		EndDate       time.Time
+		CSR           string
+		Certificate   string
+		Intermediate  string
+		DownloadLinks struct { // cert.sh download links
+			Certificate  string
+			Intermediate string
+			IconScript   string
+			PKCS7        string
+		}
+	}
+	DNSAuthDetails struct { // for DV orders with DNS auth and includeOrderParameters
+		DNSEntry string
+		DNSValue string
+	}
+	FileAuthDetails struct { // for DV orders with FILE auth and includeOrderParameters
+		FileContents string
+		FileName     string
+		PollStatus   string
+		LastPollDate time.Time
+	}
+	MetaAuthDetails struct { // for GlobalSign DV orders with META auth and includeOrderParameters
+		MetaTag string
+	}
+	EmailAuthDetails struct { // for DV orders with EMAIL auth and includeOrderParameters
+		ApproverEmail       string
+		ApproverNotifyDate  time.Time
+		ApproverConfirmDate time.Time
+	}
+}
+
+// OrdersResult represents a GET /Orders response
+type OrdersResult struct {
+	Success    bool `json:"success"`
+	OrderInfos []OrderInfo
+	Meta       struct {
+		ItemsAvailable int64
+		ItemsPerPage   int64
+		Page           int64
+		OrderBy        string
+		OrderDir       string
+		Status         string
+		ProductType    string
+		CommonName     string
+	} `json:"_meta"`
+}
+
+// OrdersRequest represents a GET /Orders request
+type OrdersRequest struct {
+	Status                   string
+	ProductType              string
+	CommonName               string
+	IncludeFulfillment       bool `url:"includeFulfillment,omitempty"`
+	IncludeOrderParameters   bool `url:"includeOrderParameters,omitempty"`
+	IncludeBillingDetails    bool `url:"includeBillingDetails,omitempty"`
+	IncludeContacts          bool `url:"includeContacts,omitempty"`
+	IncludeOrganizationInfos bool `url:"includeOrganizationInfos,omitempty"`
 }
