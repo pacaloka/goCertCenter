@@ -145,7 +145,7 @@ func GetOrder(request *GetOrderRequest) (*GetOrderResult, error) {
 	return req.result.(*GetOrderResult), err
 }
 
-// ModifiedOrders fetches modified orders. You can provide
+// GetModifiedOrders fetches modified orders. You can provide
 // a timespan to specify which changes your're interested in
 //
 func GetModifiedOrders(request *GetModifiedOrdersRequest) (*GetModifiedOrdersResult, error) {

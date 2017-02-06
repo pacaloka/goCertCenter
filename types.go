@@ -35,6 +35,7 @@ type apiRequest struct {
 	statusCode int
 }
 
+// BasicResultInfo represents the default values included in each resultset
 type BasicResultInfo struct {
 	Success bool `json:"success"`
 	Message string
