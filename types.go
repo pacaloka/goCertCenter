@@ -239,7 +239,7 @@ type OrderRequest struct {
 	TechContact     Contact         `json:",omitempty"`
 }
 
-// PutApproverEmailRequest represents a PUT /ApproverEmail response
+// PutApproverEmailResult represents a PUT /ApproverEmail response
 type PutApproverEmailResult struct {
 	Success bool `json:"success"`
 	Message string
