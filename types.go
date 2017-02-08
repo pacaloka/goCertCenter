@@ -443,7 +443,7 @@ type RevokeRequest struct {
 	Certificate       string // PEM encoded X.509 certificate
 }
 
-// ValidateNameRequest represents a POST /ValidateName response
+// ValidateNameResult represents a POST /ValidateName response
 type ValidateNameResult struct {
 	BasicResultInfo
 	IsQualified bool
@@ -494,12 +494,13 @@ type FileDataRequest struct {
 	CSR         string
 }
 
-// VulnerabilityAssessment represents a POST /VulnerabilityAssessment response
+
+// VulnerabilityAssessmentResult represents a POST /VulnerabilityAssessment response
 type VulnerabilityAssessmentResult struct {
 	BasicResultInfo
 }
 
-// VulnerabilityAssessment represents a POST /VulnerabilityAssessment request
+// VulnerabilityAssessmentRequest represents a POST /VulnerabilityAssessment request
 // https://developers.certcenter.com/v1/reference#vulnerabilityassessment
 type VulnerabilityAssessmentRequest struct {
 	CertCenterOrderID      int64
@@ -507,12 +508,12 @@ type VulnerabilityAssessmentRequest struct {
 	EmailNotificationLevel string
 }
 
-// VulnerabilityAssessmentRescan represents a GET /VulnerabilityAssessment/:CertCenterOrderID response
+// VulnerabilityAssessmentRescanResult represents a GET /VulnerabilityAssessment/:CertCenterOrderID response
 type VulnerabilityAssessmentRescanResult struct {
 	BasicResultInfo
 }
 
-// VulnerabilityAssessmentRescan represents a GET /VulnerabilityAssessmen/:CertCenterOrderID request
+// VulnerabilityAssessmentRescanRequest represents a GET /VulnerabilityAssessmen/:CertCenterOrderID request
 // https://developers.certcenter.com/v1/reference#vulnerabilityassessmentrescan
 type VulnerabilityAssessmentRescanRequest struct {
 	CertCenterOrderID int64
