@@ -47,15 +47,20 @@ func (req *apiRequest) do(apiMethod string, ParamType ...int) error {
 		case CC_PARAM_TYPE_PATH:
 			if apiMethod == "ApproverEmail" {
 				req.httpMethod = "POST"
-				req.url = fmt.Sprintf("%s/%d",
-					req.url,
+				req.url = fmt.Sprintf("%s/%d", req.url,
 					req.request.(*ResendApproverEmailRequest).CertCenterOrderID)
+			} else if apiMethod == "Order" {
+				req.httpMethod = "DELETE"
+				req.url = fmt.Sprintf("%s/%d", req.url,
+					req.request.(*DeleteOrderRequest).CertCenterOrderID)
+			} else if apiMethod == "VulnerabilityAssessment" {
+				req.url = fmt.Sprintf("%s/%d", req.url,
+					req.request.(*VulnerabilityAssessmentRequest).CertCenterOrderID)
 			}
 		case CC_PARAM_TYPE_QS | CC_PARAM_TYPE_PATH:
 			if apiMethod == "ApproverEmail" {
 				req.httpMethod = "PUT"
-				req.url = fmt.Sprintf("%s/%d?ApproverEmail=%s",
-					req.url,
+				req.url = fmt.Sprintf("%s/%d?ApproverEmail=%s", req.url,
 					req.request.(*PutApproverEmailRequest).CertCenterOrderID,
 					req.request.(*PutApproverEmailRequest).ApproverEmail)
 			} else if apiMethod == "Order" {
@@ -65,13 +70,21 @@ func (req *apiRequest) do(apiMethod string, ParamType ...int) error {
 				}
 				req.url += fmt.Sprintf("/%d?", req.request.(*GetOrderRequest).CertCenterOrderID)
 				x := v.Encode()
-				fmt.Println(x)
 				req.url += x
 			}
+		case CC_PARAM_TYPE_BODY | CC_PARAM_TYPE_PATH:
+			if apiMethod == "Revoke" {
+				req.httpMethod = "DELETE"
+				req.url = fmt.Sprintf("%s/%d", req.url,
+					req.request.(*RevokeRequest).CertCenterOrderID)
+			}
+			d, err := json.Marshal(req.request)
+			if err != nil {
+				return err
+			}
+			postData = strings.NewReader(string(d))
 		}
 	}
-
-	fmt.Println(req.url)
 
 	request, err := http.NewRequest(req.httpMethod, req.url, postData)
 	if err != nil {
@@ -93,8 +106,6 @@ func (req *apiRequest) do(apiMethod string, ParamType ...int) error {
 		return err
 
 	}
-
-	fmt.Println(string(data))
 
 	req.statusCode = response.StatusCode
 	if response.StatusCode != 200 {

@@ -134,6 +134,18 @@ func GetOrders(request *GetOrdersRequest) (*GetOrdersResult, error) {
 	return req.result.(*GetOrdersResult), err
 }
 
+// GetModifiedOrders fetches modified orders. You can provide
+// a timespan to specify which changes your're interested in
+//
+func GetModifiedOrders(request *GetModifiedOrdersRequest) (*GetModifiedOrdersResult, error) {
+	req := new(apiRequest)
+	req.result = new(GetModifiedOrdersResult)
+	req.request = request
+	err := req.do("GetModifiedOrders", CC_PARAM_TYPE_QS)
+	checkErr(err)
+	return req.result.(*GetModifiedOrdersResult), err
+}
+
 // GetOrder gives you the capability to query a particular order
 //
 func GetOrder(request *GetOrderRequest) (*GetOrderResult, error) {
@@ -145,14 +157,95 @@ func GetOrder(request *GetOrderRequest) (*GetOrderResult, error) {
 	return req.result.(*GetOrderResult), err
 }
 
-// GetModifiedOrders fetches modified orders. You can provide
-// a timespan to specify which changes your're interested in
+// DeleteOrder gives you the capability to cancel a order
 //
-func GetModifiedOrders(request *GetModifiedOrdersRequest) (*GetModifiedOrdersResult, error) {
+func DeleteOrder(request *DeleteOrderRequest) (*DeleteOrderResult, error) {
 	req := new(apiRequest)
-	req.result = new(GetModifiedOrdersResult)
+	req.result = new(DeleteOrderResult)
 	req.request = request
-	err := req.do("GetModifiedOrders", CC_PARAM_TYPE_QS)
+	err := req.do("Order", CC_PARAM_TYPE_PATH)
 	checkErr(err)
-	return req.result.(*GetModifiedOrdersResult), err
+	return req.result.(*DeleteOrderResult), err
+}
+
+// Reissue allows you to replace an existent certificate in case
+// of a key loss or algorithm/key-size upgrade
+//
+func Reissue(request *ReissueRequest) (*ReissueResult, error) {
+	req := new(apiRequest)
+	req.result = new(ReissueResult)
+	req.request = request
+	err := req.do("Reissue", CC_PARAM_TYPE_BODY)
+	checkErr(err)
+	return req.result.(*ReissueResult), err
+}
+
+// Revoke allows you to mark a certificate as invalid.
+//
+func Revoke(request *RevokeRequest) (*RevokeResult, error) {
+	req := new(apiRequest)
+	req.result = new(RevokeResult)
+	req.request = request
+	err := req.do("Revoke", CC_PARAM_TYPE_BODY|CC_PARAM_TYPE_PATH)
+	checkErr(err)
+	return req.result.(*RevokeResult), err
+}
+
+// ValidateName checks a CommonName against the Symantec EE blacklist
+// (AlwaysOnSSL/Symantec EE only)
+//
+func ValidateName(request *ValidateNameRequest) (*ValidateNameResult, error) {
+	req := new(apiRequest)
+	req.result = new(ValidateNameResult)
+	req.request = request
+	err := req.do("ValidateName", CC_PARAM_TYPE_BODY)
+	checkErr(err)
+	return req.result.(*ValidateNameResult), err
+}
+
+// DNSData retrieve appropriate data for DNS based validation
+// (AlwaysOnSSL/Symantec EE only)
+//
+func DNSData(request *DNSDataRequest) (*DNSDataResult, error) {
+	req := new(apiRequest)
+	req.result = new(DNSDataResult)
+	req.request = request
+	err := req.do("DNSData", CC_PARAM_TYPE_BODY)
+	checkErr(err)
+	return req.result.(*DNSDataResult), err
+}
+
+// FileData retrieve appropriate data for FILE based validation
+// (AlwaysOnSSL/Symantec EE only)
+//
+func FileData(request *FileDataRequest) (*FileDataResult, error) {
+	req := new(apiRequest)
+	req.result = new(FileDataResult)
+	req.request = request
+	err := req.do("FileData", CC_PARAM_TYPE_BODY)
+	checkErr(err)
+	return req.result.(*FileDataResult), err
+}
+
+// VulnerabilityAssessment allows you to configure the
+// Vulnerability Assessment (Symantec certificates, only!)
+//
+func VulnerabilityAssessment(request *VulnerabilityAssessmentRequest) (*VulnerabilityAssessmentResult, error) {
+	req := new(apiRequest)
+	req.result = new(VulnerabilityAssessmentResult)
+	req.request = request
+	err := req.do("VulnerabilityAssessment", CC_PARAM_TYPE_BODY)
+	checkErr(err)
+	return req.result.(*VulnerabilityAssessmentResult), err
+}
+
+// VulnerabilityAssessmentRescan let you initiate a re-scan for a certain order
+//
+func VulnerabilityAssessmentRescan(request *VulnerabilityAssessmentRescanRequest) (*VulnerabilityAssessmentRescanResult, error) {
+	req := new(apiRequest)
+	req.result = new(VulnerabilityAssessmentRescanResult)
+	req.request = request
+	err := req.do("VulnerabilityAssessment", CC_PARAM_TYPE_PATH)
+	checkErr(err)
+	return req.result.(*VulnerabilityAssessmentRescanResult), err
 }

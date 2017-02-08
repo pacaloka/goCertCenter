@@ -399,3 +399,121 @@ type GetOrderRequest struct {
 	IncludeContacts          bool `url:"includeContacts"`
 	IncludeOrganizationInfos bool `url:"includeOrganizationInfos"`
 }
+
+// DeleteOrderResult represents a DELETE /Order/:CertCenterOrderID response
+type DeleteOrderResult struct {
+	BasicResultInfo
+}
+
+// DeleteOrderRequest represents a DELETE /Order/:CertCenterOrderID request
+type DeleteOrderRequest struct {
+	CertCenterOrderID int64
+}
+
+// ReissueResult represents a POST /Reissue response
+type ReissueResult struct {
+	BasicResultInfo
+}
+
+// ReissueOrderParameters represents the required OrderParameters for POST /Reissue
+type ReissueOrderParameters struct {
+	CSR                    string
+	DVAuthMethod           string // for DV certificates only
+	SignatureHashAlgorithm string
+}
+
+// ReissueRequest represents a POST /Reissue request
+// Description:
+// 	https://developers.certcenter.com/reference#reissue
+type ReissueRequest struct {
+	CertCenterOrderID int64
+	OrderParameters   ReissueOrderParameters
+	ReissueEmail      string
+}
+
+// RevokeResult represents a DELETE /Revoke response
+type RevokeResult struct {
+	BasicResultInfo
+}
+
+// RevokeRequest represents a DELETE /Revoke request
+type RevokeRequest struct {
+	CertCenterOrderID int64
+	RevokeReason      string
+	Certificate       string // PEM encoded X.509 certificate
+}
+
+// ValidateNameRequest represents a POST /ValidateName response
+type ValidateNameResult struct {
+	BasicResultInfo
+	IsQualified bool
+	// If ValidateNameRequest contained a GeneratePrivateKey=true
+	// this two values are included in the result:
+	CSR        string
+	PrivateKey string
+}
+
+// ValidateNameRequest represents a POST /ValidateName request
+// https://developers.certcenter.com/v1/reference#validatename
+type ValidateNameRequest struct {
+	CommonName         string
+	GeneratePrivateKey bool // Generates a private key for you.
+	// If true the response will also include the CSR and PrivateKey values.
+}
+
+// DNSDataResult represents a POST /DNSData response
+type DNSDataResult struct {
+	BasicResultInfo
+	DNSAuthDetails struct {
+		PointerType string // =CNAME
+		DNSEntry    string
+		DNSValue    string
+	}
+}
+
+// DNSDataRequest represents a POST /DNSData request
+// https://dash.readme.io/project/certcenter/v1/refs/dnsdata
+type DNSDataRequest struct {
+	ProductCode string
+	CSR         string
+}
+
+// FileDataResult represents a POST /FileData response
+type FileDataResult struct {
+	BasicResultInfo
+	FileAuthDetails struct {
+		FileContents string
+		FileName     string
+	}
+}
+
+// FileDataRequest represents a POST /FileData request
+// https://dash.readme.io/project/certcenter/v1/refs/filedata
+type FileDataRequest struct {
+	ProductCode string
+	CSR         string
+}
+
+// VulnerabilityAssessment represents a POST /VulnerabilityAssessment response
+type VulnerabilityAssessmentResult struct {
+	BasicResultInfo
+}
+
+// VulnerabilityAssessment represents a POST /VulnerabilityAssessment request
+// https://developers.certcenter.com/v1/reference#vulnerabilityassessment
+type VulnerabilityAssessmentRequest struct {
+	CertCenterOrderID      int64
+	ServiceStatus          string
+	EmailNotificationLevel string
+}
+
+// VulnerabilityAssessmentRescan represents a GET /VulnerabilityAssessment/:CertCenterOrderID response
+type VulnerabilityAssessmentRescanResult struct {
+	BasicResultInfo
+}
+
+// VulnerabilityAssessmentRescan represents a GET /VulnerabilityAssessmen/:CertCenterOrderID request
+// https://developers.certcenter.com/v1/reference#vulnerabilityassessmentrescan
+type VulnerabilityAssessmentRescanRequest struct {
+	CertCenterOrderID int64
+}

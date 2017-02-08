@@ -4,13 +4,14 @@ import (
 	"fmt"
 	//"io/ioutil"
 	//"time"
-	certcenter "../../goCertCenter"
+	//certcenter "../../goCertCenter"
+	certcenter "github.com/certcenter/goCertCenter"
 )
 
 // Set your valid OAuth2 Bearer
 // (see https://developers.certcenter.com/docs/authentication)
 func init() {
-	certcenter.Bearer = "aValidToken.oauth2.certcenter.com"
+	certcenter.Bearer = "AValidToken.oauth2.certcenter.com"
 }
 
 func main() {
@@ -151,12 +152,101 @@ func main() {
 
 		// Get a particular order by CertCenterOrderID
 		res, _ := certcenter.GetOrder(&certcenter.GetOrderRequest{
-			CertCenterOrderID: 6272448,
+			CertCenterOrderID: 123456789,
 			IncludeFulfillment: true,
 			IncludeOrderParameters: true,
 			IncludeBillingDetails: true,
 			IncludeContacts: true,
 			IncludeOrganizationInfos: true,
+		})
+		fmt.Println(res)
+
+		//////////////////////////////////////////////////////
+
+		// Delete a particular order
+		res, _ := certcenter.DeleteOrder(&certcenter.DeleteOrderRequest{
+			CertCenterOrderID: 123456789,
+		})
+		fmt.Println(res)
+
+		//////////////////////////////////////////////////////
+
+		// Reissue a particular order
+		res, _ := certcenter.Reissue(&certcenter.ReissueRequest{
+			CertCenterOrderID: 123456789,
+			OrderParameters:certcenter.ReissueOrderParameters{
+				CSR: "#CSR#",
+				DVAuthMethod: "EMAIL",
+				SignatureHashAlgorithm: "SHA256-FULL-CHAIN",
+			},
+			ReissueEmail: "valid-approver@example.com",
+		})
+		fmt.Println(res)
+
+
+		//////////////////////////////////////////////////////
+
+		// Revoke a certificate
+		res, _ := certcenter.Revoke(&certcenter.RevokeRequest{
+			CertCenterOrderID: 123456789,
+			RevokeReason: "Key compromised",
+			Certificate: "#PEM-encoded-X.509-Certificate#",
+		})
+		fmt.Println(res)
+
+
+		//////////////////////////////////////////////////////
+
+		// Check a CommonName against the black list (AlwaysOnSSL only!)
+		// plus lets you generate a private key and PEM-encoded CSR
+		//
+		res, _ := certcenter.ValidateName(&certcenter.ValidateNameRequest{
+			CommonName: "www.example.com",
+			GeneratePrivateKey: true,
+		})
+		fmt.Println(res)
+
+		//////////////////////////////////////////////////////
+
+		// Retrieve appropriate data for DNS-based validation (AlwaysOnSSL only!)
+		//
+		csr, _ := ioutil.ReadFile("csr")
+		res, _ := certcenter.DNSData(&certcenter.DNSDataRequest{
+			CSR: string(csr),
+			ProductCode: "AlwaysOnSSL.AlwaysOnSSL",
+		})
+		fmt.Println(res)
+
+		//////////////////////////////////////////////////////
+
+		// Retrieve appropriate data for FILE-based validation (AlwaysOnSSL only!)
+		//
+		csr, _ := ioutil.ReadFile("csr")
+		res, _ := certcenter.FileData(&certcenter.FileDataRequest{
+			CSR: string(csr),
+			ProductCode: "AlwaysOnSSL.AlwaysOnSSL",
+		})
+		fmt.Println(res)
+
+
+		// VulnerabilityAssessment allows you to change an orders initial assessment settings.
+		// https://developers.certcenter.com/v1/reference#vulnerabilityassessment
+		//
+		res, _ := certcenter.VulnerabilityAssessment(&certcenter.VulnerabilityAssessmentRequest{
+			CertCenterOrderID: 123456789,
+			ServiceStatus: "Active",
+			EmailNotificationLevel: "CRITICAL",
+		})
+		fmt.Println(res)
+
+		//////////////////////////////////////////////////////
+
+		// VulnerabilityAssessmentRescan allows you to initiate a immediate re-assessment
+		// https://developers.certcenter.com/v1/reference#vulnerabilityassessmentrescan
+		//
+
+		res, _ := certcenter.VulnerabilityAssessmentRescan(&certcenter.VulnerabilityAssessmentRescanRequest{
+			CertCenterOrderID: 123456789,
 		})
 		fmt.Println(res)
 	*/
