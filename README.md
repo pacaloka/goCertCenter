@@ -37,6 +37,7 @@ func main() {
 }
 ```
 
-There are more examples available in test/test.go.
+Find more examples and detailed information:
+https://developers.certcenter.com/v1/reference
 
 Have fun!
