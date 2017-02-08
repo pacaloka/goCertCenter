@@ -494,7 +494,6 @@ type FileDataRequest struct {
 	CSR         string
 }
 
-
 // VulnerabilityAssessmentResult represents a POST /VulnerabilityAssessment response
 type VulnerabilityAssessmentResult struct {
 	BasicResultInfo
