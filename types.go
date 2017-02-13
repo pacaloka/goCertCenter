@@ -35,7 +35,7 @@ type apiRequest struct {
 	statusCode int
 }
 
-// SchemeValidationErrors provides basic fields for scheme validation errors 
+// SchemeValidationErrors provides basic fields for scheme validation errors
 type SchemeValidationErrors struct {
 	Errors []struct {
 		Msg    string `json:"msg"`
