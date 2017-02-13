@@ -18,7 +18,8 @@ func (req *apiRequest) do(apiMethod string, ParamType ...int) error {
 	paramType := CC_PARAM_TYPE_QS
 	req.httpMethod = "GET"
 	req.method = apiMethod
-	req.url = "https://api.certcenter.com/rest/v1/" + req.method
+	rawURL := "https://api.certcenter.com/rest/v1/"
+	req.url = rawURL + req.method
 	req.client = &http.Client{
 		Transport: &http.Transport{
 			TLSClientConfig: &tls.Config{
@@ -56,6 +57,13 @@ func (req *apiRequest) do(apiMethod string, ParamType ...int) error {
 			} else if apiMethod == "VulnerabilityAssessment" {
 				req.url = fmt.Sprintf("%s/%d", req.url,
 					req.request.(*VulnerabilityAssessmentRequest).CertCenterOrderID)
+			} else if apiMethod == "User" {
+				req.url = fmt.Sprintf("%s/%s", req.url, req.request.(*GetUserRequest).UsernameOrUserId)
+			} else if apiMethod == "DeleteUser" {
+				apiMethod = "User"
+				req.httpMethod = "DELETE"
+				fmt.Println(req.request.(*DeleteUserRequest).UsernameOrUserId)
+				req.url = fmt.Sprintf("%sUser/%s", rawURL, req.request.(*DeleteUserRequest).UsernameOrUserId)
 			}
 		case CC_PARAM_TYPE_QS | CC_PARAM_TYPE_PATH:
 			if apiMethod == "ApproverEmail" {
@@ -77,6 +85,10 @@ func (req *apiRequest) do(apiMethod string, ParamType ...int) error {
 				req.httpMethod = "DELETE"
 				req.url = fmt.Sprintf("%s/%d", req.url,
 					req.request.(*RevokeRequest).CertCenterOrderID)
+			} else if apiMethod == "User" {
+				req.httpMethod = "POST"
+				req.url = fmt.Sprintf("%s/%s", req.url, req.request.(*UpdateUserRequest).UsernameOrUserId)
+				req.request.(*UpdateUserRequest).UsernameOrUserId = ""
 			}
 			d, err := json.Marshal(req.request)
 			if err != nil {
@@ -104,7 +116,6 @@ func (req *apiRequest) do(apiMethod string, ParamType ...int) error {
 	data, err := ioutil.ReadAll(response.Body)
 	if err != nil {
 		return err
-
 	}
 
 	req.statusCode = response.StatusCode

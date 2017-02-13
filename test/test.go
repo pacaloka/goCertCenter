@@ -4,8 +4,7 @@ import (
 	"fmt"
 	//"io/ioutil"
 	//"time"
-	//certcenter "../../goCertCenter"
-	certcenter "github.com/certcenter/goCertCenter"
+	certcenter "../../goCertCenter"
 )
 
 // Set your valid OAuth2 Bearer
@@ -244,11 +243,65 @@ func main() {
 		// VulnerabilityAssessmentRescan allows you to initiate a immediate re-assessment
 		// https://developers.certcenter.com/v1/reference#vulnerabilityassessmentrescan
 		//
-
 		res, _ := certcenter.VulnerabilityAssessmentRescan(&certcenter.VulnerabilityAssessmentRescanRequest{
 			CertCenterOrderID: 123456789,
 		})
 		fmt.Println(res)
+
+		//////////////////////////////////////////////////////
+
+		// CreateUser allows you to create a new UI user for your organizations account
+		// https://developers.certcenter.com/v1/reference#createuser
+		//
+		res, _ := certcenter.CreateUser(&certcenter.CreateUserRequest{
+			certcenter.UserData{
+				FullName: "John Doe",
+				Email: "john@example.org",
+				Username: "johndoes",
+				Password: "cOmpL3xx/",
+				Mobile: "",
+				Roles: []string{"PROCUREMENT"},
+				Locale: "en_US",
+				Timezone: "US/Pacific",
+			},
+		})
+		fmt.Println(res)
+
+		//////////////////////////////////////////////////////
+
+		// UpdateUser allows you to update an user
+		// https://developers.certcenter.com/v1/reference#updateuser
+		//
+		res, _ := certcenter.UpdateUser(&certcenter.UpdateUserRequest{
+		certcenter.UserData{
+				UsernameOrUserId: "1234567",
+				FullName: "John Doe",
+				Email: "john@example.org",
+			}})
+		fmt.Println(res)
+
+		//////////////////////////////////////////////////////
+
+		// GetUser allows you to inquire information about one or all users
+		// https://developers.certcenter.com/v1/reference#getuser
+		//
+		res, _ := certcenter.GetUser(&certcenter.GetUserRequest{
+		certcenter.UserData{
+				UsernameOrUserId: "1234567",
+			}})
+		fmt.Println(res)
+
+		//////////////////////////////////////////////////////
+
+		// DeleteUser allows you to remove a specific user
+		// https://developers.certcenter.com/v1/reference#deleteuser
+		//
+		res, _ := certcenter.DeleteUser(&certcenter.DeleteUserRequest{
+			UsernameOrUserId: "1234567",
+		})
+		fmt.Println(res)
+
+
 	*/
 
 	fmt.Println("")

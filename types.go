@@ -35,12 +35,24 @@ type apiRequest struct {
 	statusCode int
 }
 
+type SchemeValidationErrors struct {
+	Errors []struct {
+		Msg    string `json:"msg"`
+		Status string `json:"status"`
+		Key    string `json:"key"`
+		SchemeValidationErrors
+	}
+}
+
 // BasicResultInfo represents the default values included in each resultset
 type BasicResultInfo struct {
 	Success bool `json:"success"`
 	Message string
 	// if !Success, ErrorId may be provided
 	ErrorId int
+	// Scheme validation results
+	Msg string `json:"msg"`
+	SchemeValidationErrors
 }
 
 // ProfileResult represents a GET /Profile response
@@ -516,4 +528,77 @@ type VulnerabilityAssessmentRescanResult struct {
 // https://developers.certcenter.com/v1/reference#vulnerabilityassessmentrescan
 type VulnerabilityAssessmentRescanRequest struct {
 	CertCenterOrderID int64
+}
+
+// UserData represents a basic field-set for /User transactions
+type UserData struct {
+	UsernameOrUserId string   `json:",omitempty"`
+	FullName         string   `json:",omitempty"`
+	Email            string   `json:",omitempty"`
+	Username         string   `json:",omitempty"`
+	Password         string   `json:",omitempty"`
+	Roles            []string `json:",omitempty"`
+	Mobile           string   `json:",omitempty"`
+	Timezone         string   `json:",omitempty"`
+	Locale           string   `json:",omitempty"`
+
+	// Available on user data retrieval
+	SpecialProductAvailability bool   `json:",omitempty"`
+	Scope                      string `json:",omitempty"`
+	Active                     bool   `json:",omitempty"`
+	TwoFactorEnabled           bool   `json:",omitempty"`
+	InsertData                 int64  `json:",omitempty"` // Unix time
+	LastUpdateData             int64  `json:",omitempty"` // Unix time
+	LastPasswordChangeDate     int64  `json:",omitempty"` // Unix time
+}
+
+// CreateUserResult represents a POST /User response
+type CreateUserResult struct {
+	BasicResultInfo
+	Id       int64
+	FullName string
+	Username string
+	Roles    []string
+}
+
+// CreateUserRequest represents a POST /User request
+// https://developers.certcenter.com/v1/reference#createuser
+type CreateUserRequest struct {
+	UserData
+}
+
+// UpdateUserResult represents a POST /User/:UsernameOrUserId response
+type UpdateUserResult struct {
+	BasicResultInfo
+	Id int64
+}
+
+// UpdateUserRequest represents a POST /User/:UsernameOrUserId request
+// https://developers.certcenter.com/v1/reference#updateuser
+type UpdateUserRequest struct {
+	UserData
+}
+
+// GetUserResult represents a GET /User/:UsernameOrUserId response
+type GetUserResult struct {
+	BasicResultInfo
+	Id int64
+}
+
+// GetUserRequest represents a GET /User/:UsernameOrUserId request
+// https://developers.certcenter.com/v1/reference#getuser
+type GetUserRequest struct {
+	UserData
+}
+
+// DeleteUserResult represents a DELETE /User/:UsernameOrUserId response
+type DeleteUserResult struct {
+	BasicResultInfo
+	Id int64
+}
+
+// DeleteUserRequest represents a GET /User/:UsernameOrUserId request
+// https://developers.certcenter.com/v1/reference#deleteuser
+type DeleteUserRequest struct {
+	UsernameOrUserId string
 }

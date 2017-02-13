@@ -249,3 +249,48 @@ func VulnerabilityAssessmentRescan(request *VulnerabilityAssessmentRescanRequest
 	checkErr(err)
 	return req.result.(*VulnerabilityAssessmentRescanResult), err
 }
+
+// CreateUser creates a new user and assign the desired rights
+//
+func CreateUser(request *CreateUserRequest) (*CreateUserResult, error) {
+	req := new(apiRequest)
+	req.result = new(CreateUserResult)
+	req.request = request
+	err := req.do("User", CC_PARAM_TYPE_BODY)
+	checkErr(err)
+	return req.result.(*CreateUserResult), err
+}
+
+// UpdateUser updates an user
+//
+func UpdateUser(request *UpdateUserRequest) (*UpdateUserResult, error) {
+	req := new(apiRequest)
+	req.result = new(UpdateUserResult)
+	req.request = request
+	err := req.do("User", CC_PARAM_TYPE_PATH|CC_PARAM_TYPE_BODY)
+	checkErr(err)
+	return req.result.(*UpdateUserResult), err
+}
+
+// GetUser inquires information about a certain user or even all your
+// users (if you keep UserData.UsernameOrUserId blank)
+//
+func GetUser(request *GetUserRequest) (*GetUserResult, error) {
+	req := new(apiRequest)
+	req.result = new(GetUserResult)
+	req.request = request
+	err := req.do("User", CC_PARAM_TYPE_PATH)
+	checkErr(err)
+	return req.result.(*GetUserResult), err
+}
+
+// DeleteUser allows you to delete an user
+//
+func DeleteUser(request *DeleteUserRequest) (*DeleteUserResult, error) {
+	req := new(apiRequest)
+	req.result = new(DeleteUserResult)
+	req.request = request
+	err := req.do("DeleteUser", CC_PARAM_TYPE_PATH)
+	checkErr(err)
+	return req.result.(*DeleteUserResult), err
+}
