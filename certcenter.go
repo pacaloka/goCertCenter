@@ -294,3 +294,14 @@ func DeleteUser(request *DeleteUserRequest) (*DeleteUserResult, error) {
 	checkErr(err)
 	return req.result.(*DeleteUserResult), err
 }
+
+// KvStore allows you to use mod_fauth with CertCenter's free kv-storage
+//
+func KvStore(request *KeyValueStoreRequest) (*KeyValueStoreResult, error) {
+	req := new(apiRequest)
+	req.result = new(KeyValueStoreResult)
+	req.request = request
+	err := req.kv()
+	checkErr(err)
+	return req.result.(*KeyValueStoreResult), err
+}

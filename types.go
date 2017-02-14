@@ -9,6 +9,11 @@ import (
 // Bearer represents the authentication token you're going to use
 var Bearer string
 
+// If you want to use CertCenter's free key-value database,
+// please ask your partner manager or our customer support
+// team to send you an "AlwaysOnSSL KV-Storage Authorization-Key"
+var KvStoreAuthorizationKey string
+
 const (
 	// CC_PARAM_TYPE_QS is QueryString (eg. ?CertCenterOrderId=123)
 	CC_PARAM_TYPE_QS = 1 << iota
@@ -602,4 +607,15 @@ type DeleteUserResult struct {
 // https://developers.certcenter.com/v1/reference#deleteuser
 type DeleteUserRequest struct {
 	UsernameOrUserId string
+}
+
+// KeyValueStoreResponse represents a basic kv-storage response
+type KeyValueStoreResult struct {
+	Message string `json:"message"`
+}
+
+// KeyValueStoreRequest represents a basic kv-storage request
+type KeyValueStoreRequest struct {
+	Key   string `json:"filename,omitempty"`
+	Value string `json:"hash"`
 }

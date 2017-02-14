@@ -114,6 +114,7 @@ func (req *apiRequest) do(apiMethod string, ParamType ...int) error {
 	}
 
 	data, err := ioutil.ReadAll(response.Body)
+
 	if err != nil {
 		return err
 	}
@@ -128,6 +129,60 @@ func (req *apiRequest) do(apiMethod string, ParamType ...int) error {
 		case 417: // Invalid Request Data
 		case 406: // No Changes Made
 		}
+	}
+
+	if err := json.Unmarshal(data, &req.result); err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (req *apiRequest) kv() error {
+
+	if KvStoreAuthorizationKey == "" {
+		return errors.New("KvStoreAuthorizationKey not set. See https://developers.certcenter.com/v1/docs/howto-order-alwaysonssl-symantec-ee-certificates#section-4-order-procedure for more details.")
+	}
+
+	req.url = "https://fauth-db.eu.certcenter.com/" + req.request.(*KeyValueStoreRequest).Key
+	req.request.(*KeyValueStoreRequest).Key = ""
+	req.client = &http.Client{
+		Transport: &http.Transport{
+			TLSClientConfig: &tls.Config{
+				PreferServerCipherSuites: true,
+				MinVersion:               tls.VersionTLS12,
+			},
+		},
+	}
+
+	d, err := json.Marshal(req.request)
+	if err != nil {
+		return err
+	}
+
+	request, err := http.NewRequest("POST", req.url, strings.NewReader(string(d)))
+	if err != nil {
+		return err
+	}
+
+	request.Header.Add("x-api-key", KvStoreAuthorizationKey)
+	request.Header.Add("Content-Type", "application/json")
+
+	response, err := req.client.Do(request)
+	defer response.Body.Close()
+
+	if response.ContentLength > 1<<12 || response.ContentLength == 0 {
+		return errors.New("CertCenter KV-API: Returned content with wired length")
+	}
+
+	data, err := ioutil.ReadAll(response.Body)
+	if err != nil {
+		return err
+	}
+
+	req.statusCode = response.StatusCode
+	if response.StatusCode != 200 {
+		return errors.New("CertCenter KV-API: Invalid status code")
 	}
 
 	if err := json.Unmarshal(data, &req.result); err != nil {
