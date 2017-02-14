@@ -43,7 +43,7 @@ func order(CommonName string, Period int) {
 		panic("..")
 	}
 
-	resOrder, err := certcenter.Order(&certcenter.OrderRequest{
+	resOrder, _ := certcenter.Order(&certcenter.OrderRequest{
 		OrderParameters: certcenter.OrderParameters{
 			ProductCode:    "AlwaysOnSSL.AlwaysOnSSL",
 			CSR:            resValidateName.CSR,

@@ -9,9 +9,10 @@ import (
 // Bearer represents the authentication token you're going to use
 var Bearer string
 
-// If you want to use CertCenter's free key-value database,
-// please ask your partner manager or our customer support
-// team to send you an "AlwaysOnSSL KV-Storage Authorization-Key"
+// KvStoreAuthorizationKey need to be set if you want to use
+// CertCenter's free key-value database, please ask your partner
+// manager or our customer support team to send you an
+// "AlwaysOnSSL KV-Storage Authorization-Key"
 var KvStoreAuthorizationKey string
 
 const (
@@ -609,7 +610,7 @@ type DeleteUserRequest struct {
 	UsernameOrUserId string
 }
 
-// KeyValueStoreResponse represents a basic kv-storage response
+// KeyValueStoreResult represents a basic kv-storage response
 type KeyValueStoreResult struct {
 	Message string `json:"message"`
 }
