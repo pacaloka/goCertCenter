@@ -10,7 +10,7 @@ import (
 // Set your valid OAuth2 Bearer
 // (see https://developers.certcenter.com/docs/authentication)
 func init() {
-	certcenter.Bearer = ""
+	certcenter.Bearer = "AValidToken.oauth2.certcenter.com"
 }
 
 func main() {
@@ -79,19 +79,19 @@ func main() {
 		// Order a certificate
 		csr, _ := ioutil.ReadFile("csr")
 		res, _ := certcenter.Order(&certcenter.OrderRequest{
-				OrderParameters: certcenter.OrderParameters{
+				OrderParameters: &certcenter.OrderParameters{
 					ProductCode: "RapidSSL.RapidSSL",
 					CSR: string(csr),
 					ValidityPeriod: 24,
 					ApproverEmail:"domains@certcenter.com",
 				},
-				AdminContact: certcenter.Contact{
+				AdminContact: &certcenter.Contact{
 					FirstName: "John",
 					LastName: "Doe",
 					Phone: "+1 212 999 999",
 					Email: "john.doe@example.com",
 				},
-				TechContact: certcenter.Contact{
+				TechContact: &certcenter.Contact{
 					FirstName: "John",
 					LastName: "Doe",
 					Phone: "+1 212 999 999",
@@ -314,6 +314,73 @@ func main() {
 		}); if err!=nil {
 		  panic("..")
 		}
+
+
+		//////////////////////////////////////////////////////
+
+		// CreateVoucher creates a coupon code which can later be redeemded.
+		// https://developers.certcenter.com/v1/reference#createvoucher
+		//
+		res, _ := certcenter.CreateVoucher(&certcenter.CreateVoucherRequest{
+			OrderParameters:certcenter.OrderParameters{
+				ProductCode: "Thawte.SSL123",
+				PartnerOrderID: "My voucher order id (optional)",
+				ServerCount: 1,
+				SubjectAltNameCount: 0,
+				ValidityPeriod: 12,
+			},
+		})
+		fmt.Println(res)
+
+		//////////////////////////////////////////////////////
+
+		// RedeemVoucher let you redeem a previously generated voucher code
+		// https://developers.certcenter.com/v1/reference#redeemvoucher
+		//
+		csr, _ := ioutil.ReadFile("csr")
+		fmt.Println(string(csr))
+		res, _ := certcenter.RedeemVoucher(&certcenter.RedeemVoucherRequest{
+				VoucherCode: "JDX1UBDC6AA1",
+				// You don't need OrganizationInfo on DV orders, except for SSL123.
+				OrganizationInfo: &certcenter.OrganizationInfo{
+					OrganizationName: "Acme LCC",
+					OrganizationAddress: &certcenter.OrganizationAddress{
+						AddressLine1: "40 5th Ave",
+						Region: "NY",
+						PostalCode: "12012",
+						Country: "US",
+						City: "NY",
+						Phone: "+1 121 444444",
+					},
+				},
+				OrderParameters: &certcenter.OrderParameters{
+					ProductCode: "Thawte.SSL123",
+					CSR: string(csr),
+					ValidityPeriod: 12,
+					DVAuthMethod: "EMAIL",
+					ServerCount: 1,
+					// Needs to be a valid approver email address.
+					// Inquire valid addresses via /ApproverEmail
+					ApproverEmail:"postmaster@example.com",
+			    SignatureHashAlgorithm: "SHA256-FULL-CHAIN",
+				},
+				AdminContact: &certcenter.Contact{
+					FirstName: "John",
+					LastName: "Doe",
+					Title: "CEO",
+					Phone: "+1 212 999 999",
+					Email: "john.doe@example.com",
+				},
+				TechContact: &certcenter.Contact{
+					FirstName: "John",
+					LastName: "Doe",
+					Title: "CEO",
+					Phone: "+1 212 999 999",
+					Email: "john.doe@example.com",
+				},
+			},
+		)
+		fmt.Println(res)
 
 	*/
 

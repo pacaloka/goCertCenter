@@ -12,6 +12,8 @@ import (
 	"strings"
 )
 
+// do is the central API communication handler
+//
 func (req *apiRequest) do(apiMethod string, ParamType ...int) error {
 
 	var postData io.Reader
@@ -114,7 +116,6 @@ func (req *apiRequest) do(apiMethod string, ParamType ...int) error {
 	}
 
 	data, err := ioutil.ReadAll(response.Body)
-
 	if err != nil {
 		return err
 	}
@@ -138,6 +139,10 @@ func (req *apiRequest) do(apiMethod string, ParamType ...int) error {
 	return nil
 }
 
+// kv allows you to use CertCenter's free key-value storage in conjunction
+// with AlwaysOnSSL (aka Symantec Encryption Everywhere) certificates as
+// described at https://developers.certcenter.com/docs/tutorial-integrate-alwaysonssl
+//
 func (req *apiRequest) kv() error {
 
 	if KvStoreAuthorizationKey == "" {

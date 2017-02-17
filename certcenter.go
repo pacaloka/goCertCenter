@@ -305,3 +305,25 @@ func KvStore(request *KeyValueStoreRequest) (*KeyValueStoreResult, error) {
 	checkErr(err)
 	return req.result.(*KeyValueStoreResult), err
 }
+
+// CreateVoucher creates a coupon code which can later be redeemded.
+//
+func CreateVoucher(request *CreateVoucherRequest) (*CreateVoucherResult, error) {
+	req := new(apiRequest)
+	req.result = new(CreateVoucherResult)
+	req.request = request
+	err := req.do("Voucher", CC_PARAM_TYPE_BODY)
+	checkErr(err)
+	return req.result.(*CreateVoucherResult), err
+}
+
+// RedeemVoucher let you redeem a previously generated voucher code
+//
+func RedeemVoucher(request *RedeemVoucherRequest) (*RedeemVoucherResult, error) {
+	req := new(apiRequest)
+	req.result = new(RedeemVoucherResult)
+	req.request = request
+	err := req.do("Redeem", CC_PARAM_TYPE_BODY)
+	checkErr(err)
+	return req.result.(*RedeemVoucherResult), err
+}

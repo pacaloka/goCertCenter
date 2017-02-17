@@ -55,8 +55,9 @@ type SchemeValidationErrors struct {
 type BasicResultInfo struct {
 	Success bool `json:"success"`
 	Message string
-	// if !Success, ErrorId may be provided
-	ErrorId int
+	// if !Success, ErrorId and/or ErrorField may be provided
+	ErrorId    int
+	ErrorField string
 	// Scheme validation results
 	Msg string `json:"msg"`
 	SchemeValidationErrors
@@ -215,7 +216,7 @@ type OrderResult struct {
 
 // OrderParameters represents generic Order Parameters
 type OrderParameters struct {
-	CSR                    string   // PEM-encoded PKCS#10
+	CSR                    string   `json:",omitempty"` // PEM-encoded PKCS#10
 	IsCompetitiveUpgrade   bool     `json:",omitempty"`
 	IsRenewal              bool     `json:",omitempty"`
 	PartnerOrderID         string   `json:",omitempty"`
@@ -229,16 +230,10 @@ type OrderParameters struct {
 	ApproverEmail          string   `json:",omitempty"`
 }
 
-// Contact represents a generic Contact type (for AdminContact and TechContact)
-type Contact struct {
-	Title               string              `json:",omitempty"`
-	FirstName           string              `json:",omitempty"`
-	LastName            string              `json:",omitempty"`
-	OrganizationName    string              `json:",omitempty"`
-	OrganizationAddress OrganizationAddress `json:",omitempty"`
-	Phone               string              `json:",omitempty"`
-	Fax                 string              `json:",omitempty"`
-	Email               string              `json:",omitempty"`
+// OrganizationInfo represents organizational information
+type OrganizationInfo struct {
+	OrganizationName    string               `json:",omitempty"`
+	OrganizationAddress *OrganizationAddress `json:",omitempty"`
 }
 
 // OrganizationAddress holds general information about a organization
@@ -252,15 +247,24 @@ type OrganizationAddress struct {
 	Fax          string `json:",omitempty"`
 }
 
+// Contact represents a generic Contact type (for AdminContact and TechContact)
+type Contact struct {
+	Title               string               `json:",omitempty"`
+	FirstName           string               `json:",omitempty"`
+	LastName            string               `json:",omitempty"`
+	OrganizationName    string               `json:",omitempty"`
+	OrganizationAddress *OrganizationAddress `json:",omitempty"`
+	Phone               string               `json:",omitempty"`
+	Fax                 string               `json:",omitempty"`
+	Email               string               `json:",omitempty"`
+}
+
 // OrderRequest represents a POST /Order request
 type OrderRequest struct {
-	OrganizationInfo struct {
-		OrganizationName    string              `json:",omitempty"`
-		OrganizationAddress OrganizationAddress `json:",omitempty"`
-	} `json:",omitempty"`
-	OrderParameters OrderParameters `json:",omitempty"`
-	AdminContact    Contact         `json:",omitempty"`
-	TechContact     Contact         `json:",omitempty"`
+	OrganizationInfo *OrganizationInfo `json:",omitempty"`
+	OrderParameters  *OrderParameters  `json:",omitempty"`
+	AdminContact     *Contact          `json:",omitempty"`
+	TechContact      *Contact          `json:",omitempty"`
 }
 
 // PutApproverEmailResult represents a PUT /ApproverEmail response
@@ -619,4 +623,32 @@ type KeyValueStoreResult struct {
 type KeyValueStoreRequest struct {
 	Key   string `json:"filename,omitempty"`
 	Value string `json:"hash"`
+}
+
+// CreateVoucherResult represents a POST /Voucher response
+type CreateVoucherResult struct {
+	BasicResultInfo
+	VoucherCode     string
+	OrderParameters OrderParameters
+}
+
+// CreateVoucherRequest represents a POST /Voucher request
+// https://developers.certcenter.com/v1/reference#createvoucher
+type CreateVoucherRequest struct {
+	OrderParameters OrderParameters
+}
+
+// RedeemVoucherResult represents a POST /Redeem response
+type RedeemVoucherResult struct {
+	OrderResult
+}
+
+// RedeemVoucherRequest represents a POST /Redeem request
+// https://developers.certcenter.com/v1/reference#redeemvoucher
+type RedeemVoucherRequest struct {
+	VoucherCode      string
+	OrganizationInfo *OrganizationInfo `json:",omitempty"`
+	OrderParameters  *OrderParameters  `json:",omitempty"`
+	AdminContact     *Contact          `json:",omitempty"`
+	TechContact      *Contact          `json:",omitempty"`
 }
