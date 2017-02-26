@@ -1,11 +1,11 @@
 package certcenter
 
 import (
+	"certcenter.com/go/query"
 	"crypto/tls"
 	"encoding/json"
 	"errors"
 	"fmt"
-	"certcenter.com/go/query"
 	"io"
 	"io/ioutil"
 	"net/http"
