@@ -5,7 +5,7 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
-	"github.com/certcenter/goCertCenter/query"
+	"certcenter.com/go/query"
 	"io"
 	"io/ioutil"
 	"net/http"
@@ -146,7 +146,7 @@ func (req *apiRequest) do(apiMethod string, ParamType ...int) error {
 func (req *apiRequest) kv() error {
 
 	if KvStoreAuthorizationKey == "" {
-		return errors.New("KvStoreAuthorizationKey not set. See https://developers.certcenter.com/v1/docs/howto-order-alwaysonssl-symantec-ee-certificates#section-4-order-procedure for more details.")
+		return errors.New("KvStoreAuthorizationKey not set. See https://developers.certcenter.com/v1/docs/file-validation-mod-fauth for more details.")
 	}
 
 	req.url = "https://fauth-db.eu.certcenter.com/" + req.request.(*KeyValueStoreRequest).Key

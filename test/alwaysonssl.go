@@ -2,7 +2,7 @@ package main
 
 import (
 	"fmt"
-	certcenter "github.com/certcenter/goCertCenter"
+	certcenter "certcenter.com/go"
 	"os"
 )
 
@@ -44,7 +44,7 @@ func order(CommonName string, Period int) {
 	}
 
 	resOrder, _ := certcenter.Order(&certcenter.OrderRequest{
-		OrderParameters: certcenter.OrderParameters{
+		OrderParameters: &certcenter.OrderParameters{
 			ProductCode:    "AlwaysOnSSL.AlwaysOnSSL",
 			CSR:            resValidateName.CSR,
 			DVAuthMethod:   "FILE",

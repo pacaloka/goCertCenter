@@ -8,7 +8,7 @@ package main
 import (
 	"fmt"
 	"io/ioutil"
-	certcenter "github.com/CertCenter/goCertCenter"
+	certcenter "certcenter.com/go"
 )
 
 /* Set your Authorization Token
@@ -33,7 +33,7 @@ func main() {
 	res, _ := certcenter.ValidateCSR(&certcenter.ValidateCSRRequest{CSR: string(csr)})
 	fmt.Println(res)
 
-	return 
+	return
 }
 ```
 
