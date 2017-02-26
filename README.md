@@ -1,6 +1,7 @@
 [![Go Report Card](https://goreportcard.com/badge/github.com/CertCenter/goCertCenter)](https://goreportcard.com/report/github.com/CertCenter/goCertCenter)
 
-It's quite easy to use CertCenter's API in your Go projects:
+It's quite easy to use CertCenter's API with your Go projects.
+(We recommend to get the source via a **go get certcenter.com/go**).
 
 ```go
 package main
