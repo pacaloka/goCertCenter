@@ -327,3 +327,57 @@ func RedeemVoucher(request *RedeemVoucherRequest) (*RedeemVoucherResult, error) 
 	checkErr(err)
 	return req.result.(*RedeemVoucherResult), err
 }
+
+// GetVouchers inquires information about all your voucher codes.
+//
+func GetVouchers() (*GetVouchersResult, error) {
+	req := new(apiRequest)
+	req.result = new(GetVouchersResult)
+	err := req.do("Vouchers")
+	checkErr(err)
+	return req.result.(*GetVouchersResult), err
+}
+
+// GetVoucher inquires information about a particular voucher.
+//
+func GetVoucher(request *GetVoucherRequest) (*GetVouchersResult, error) {
+	req := new(apiRequest)
+	req.result = new(GetVouchersResult)
+	req.request = request
+	err := req.do("GetVoucher", CC_PARAM_TYPE_PATH)
+	checkErr(err)
+	return req.result.(*GetVouchersResult), err
+}
+
+// GetVoucherAnonymously inquires information about a particular voucher.
+//
+func GetVoucherAnonymously(request *GetVoucherRequest) (*GetVouchersResult, error) {
+	req := new(apiRequest)
+	req.result = new(GetVouchersResult)
+	req.request = request
+	err := req.do("GetVoucherAnonymously", CC_PARAM_TYPE_PATH)
+	checkErr(err)
+	return req.result.(*GetVouchersResult), err
+}
+
+// GetVoucherOrderAnonymously inquires information about a order initiated by func RedeemVoucher(..).
+//
+func GetVoucherOrderAnonymously(request *GetVoucherRequest) (*GetVouchersResult, error) {
+	req := new(apiRequest)
+	req.result = new(GetVouchersResult)
+	req.request = request
+	err := req.do("GetVoucherOrderAnonymously", CC_PARAM_TYPE_PATH)
+	checkErr(err)
+	return req.result.(*GetVouchersResult), err
+}
+
+// DeleteVoucher allows you to invalidate a particular voucher code.
+//
+func DeleteVoucher(request *DeleteVoucherRequest) (*DeleteVoucherResult, error) {
+	req := new(apiRequest)
+	req.result = new(DeleteVoucherResult)
+	req.request = request
+	err := req.do("DeleteVoucher", CC_PARAM_TYPE_PATH)
+	checkErr(err)
+	return req.result.(*DeleteVoucherResult), err
+}

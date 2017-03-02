@@ -652,3 +652,37 @@ type RedeemVoucherRequest struct {
 	AdminContact     *Contact          `json:",omitempty"`
 	TechContact      *Contact          `json:",omitempty"`
 }
+
+// GetVouchersResult represents a GET /Vouchers and a GET /Voucher/:VoucherCode response
+// https://developers.certcenter.com/v1/reference#getvouchers
+// https://developers.certcenter.com/v1/reference#getvoucher
+type GetVouchersResult struct {
+	BasicResultInfo
+	Vouchers []struct {
+		RedeemInfo struct {
+			RedeemDate        time.Time
+			CertCenterOrderID int64
+		}
+		CreationDate    time.Time
+		OrderParameters OrderParameters
+		VoucherCode     string
+		Redeemed        bool
+	}
+}
+
+// GetVoucherRequest represents a GET /Voucher/:VoucherCode request
+// https://developers.certcenter.com/v1/reference#getvoucher
+type GetVoucherRequest struct {
+	VoucherCode string
+}
+
+// DeleteVoucherResult represents a DELETE /Voucher/:VoucherCode response
+type DeleteVoucherResult struct {
+	OrderResult
+}
+
+// DeleteVoucherRequest represents a DELETE /Voucher/:VoucherCode request
+// https://developers.certcenter.com/v1/reference#deletevoucher
+type DeleteVoucherRequest struct {
+	VoucherCode string
+}

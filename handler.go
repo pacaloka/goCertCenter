@@ -18,6 +18,7 @@ func (req *apiRequest) do(apiMethod string, ParamType ...int) error {
 
 	var postData io.Reader
 	paramType := CC_PARAM_TYPE_QS
+	anonymously := false
 	req.httpMethod = "GET"
 	req.method = apiMethod
 	rawURL := "https://api.certcenter.com/rest/v1/"
@@ -66,6 +67,19 @@ func (req *apiRequest) do(apiMethod string, ParamType ...int) error {
 				req.httpMethod = "DELETE"
 				fmt.Println(req.request.(*DeleteUserRequest).UsernameOrUserId)
 				req.url = fmt.Sprintf("%sUser/%s", rawURL, req.request.(*DeleteUserRequest).UsernameOrUserId)
+			} else if apiMethod == "GetVoucher" {
+				apiMethod = "Voucher"
+				req.url = fmt.Sprintf("%sVoucher/%s", rawURL, req.request.(*GetVoucherRequest).VoucherCode)
+			} else if apiMethod == "GetVoucherAnonymously" {
+				apiMethod = "Voucher"
+				req.url = fmt.Sprintf("%sVoucher/*/%s", rawURL, req.request.(*GetVoucherRequest).VoucherCode)
+			} else if apiMethod == "DeleteVoucher" {
+				apiMethod = "Voucher"
+				req.httpMethod = "DELETE"
+				req.url = fmt.Sprintf("%sVoucher/%s", rawURL, req.request.(*DeleteVoucherRequest).VoucherCode)
+			} else if apiMethod == "GetVoucherOrderAnonymously" {
+				apiMethod = "Order"
+				req.url = fmt.Sprintf("%sOrder/*/%s", req.url, req.request.(*GetVoucherRequest).VoucherCode)
 			}
 		case CC_PARAM_TYPE_QS | CC_PARAM_TYPE_PATH:
 			if apiMethod == "ApproverEmail" {
@@ -105,7 +119,9 @@ func (req *apiRequest) do(apiMethod string, ParamType ...int) error {
 		return err
 	}
 
-	request.Header.Add("Authorization", "Bearer "+Bearer)
+	if !anonymously {
+		request.Header.Add("Authorization", "Bearer "+Bearer)
+	}
 	request.Header.Set("Content-Type", "application/json; charset=utf8")
 
 	response, err := req.client.Do(request)
