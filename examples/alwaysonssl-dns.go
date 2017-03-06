@@ -16,7 +16,7 @@ import (
 )
 
 func init() {
-	certcenter.Bearer = "4BJFC2MN4ESL5H17R1EQWWG4.oauth2.certcenter.com"
+	certcenter.Bearer = "AValidToken.oauth2.certcenter.com"
 }
 
 func fetch(CommonName string) {
