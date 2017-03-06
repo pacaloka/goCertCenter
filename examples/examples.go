@@ -315,7 +315,6 @@ func main() {
 			  panic("..")
 			}
 
-
 			//////////////////////////////////////////////////////
 
 			// CreateVoucher creates a coupon code which can later be redeemded.

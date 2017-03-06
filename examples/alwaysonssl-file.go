@@ -7,7 +7,7 @@ import (
 )
 
 func init() {
-	certcenter.Bearer = "aValidToken.oauth2.certcenter.com"
+	certcenter.Bearer = "AValidToken.oauth2.certcenter.com"
 	certcenter.KvStoreAuthorizationKey = "aValidTokenAuthKey"
 }
 
