@@ -19,7 +19,7 @@ func order(CommonName string, Period int) {
 	if err != nil {
 		panic("..")
 	}
-	fmt.Println(resValidateName)
+
 	if resValidateName.IsQualified == false {
 		panic("CommonName is not qualified (blacklisted)")
 	}

@@ -27,7 +27,7 @@ func fetch(CommonName string) {
 	if err != nil {
 		panic(err)
 	}
-	fmt.Println(resValidateName)
+
 	if resValidateName.IsQualified == false {
 		panic("CommonName is not qualified (blacklisted)")
 	}
