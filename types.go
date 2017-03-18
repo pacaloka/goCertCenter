@@ -345,6 +345,7 @@ type OrderInfo struct {
 	DNSAuthDetails struct { // for DV orders with DNS auth and includeOrderParameters
 		DNSEntry string
 		DNSValue string
+		Example  string
 	}
 	FileAuthDetails struct { // for DV orders with FILE auth and includeOrderParameters
 		FileContents string
@@ -491,6 +492,7 @@ type DNSDataResult struct {
 		PointerType string // =CNAME
 		DNSEntry    string
 		DNSValue    string
+		Example     string
 	}
 }
 
