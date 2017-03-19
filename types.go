@@ -350,10 +350,11 @@ type OrderInfo struct {
 	FileAuthDetails struct { // for DV orders with FILE auth and includeOrderParameters
 		FileContents string
 		FileName     string
+		FilePath     string
 		PollStatus   string
 		LastPollDate time.Time
 	}
-	MetaAuthDetails struct { // for GlobalSign DV orders with META auth and includeOrderParameters
+	MetaAuthDetails struct { // for GlobalSign DV orders with META auth and includeOrderParameters (deprecated)
 		MetaTag string
 	}
 	EmailAuthDetails struct { // for DV orders with EMAIL auth and includeOrderParameters
@@ -509,6 +510,7 @@ type FileDataResult struct {
 	FileAuthDetails struct {
 		FileContents string
 		FileName     string
+		FilePath     string
 	}
 }
 
