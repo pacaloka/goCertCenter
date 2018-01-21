@@ -173,19 +173,37 @@ type UserAgreementResult struct {
 	UserAgreement string
 }
 
-// ApproverListRequest represents a GET /ApproverList response
+// ApproverListResult represents a GET /ApproverList request
 type ApproverListRequest struct {
 	CommonName  string
-	ProductCode string
+	ProductCode string `json:",omitempty"`
+	DNSNames string `json:",omitempty"`
 }
 
-// ApproverListResult represents a GET /ApproverList request
+// ApproverListRequest represents a GET /ApproverList response
 type ApproverListResult struct {
 	BasicResultInfo
-	ApproverList []struct {
-		ApproverEmail string
-		ApproverType  string // Domain, Generic
-	}
+	// New approver information structure to
+	// better implement BR 3.2.2.4 requirements
+	DomainApprovers *DomainApprovers `json:",omitempty"`
+	// Keep this legacy structure for backward compatibility reasons
+	ApproverList []Approver `json:",omitempty"`
+}
+
+// DomainApprovers contains the DomainApprover structure
+type DomainApprovers struct {
+	DomainApprover []DomainApproverItem `json:",omitempty"`
+}
+
+type DomainApproverItem struct {
+	Domain string `json:",omitempty"`
+	Approvers []Approver `json:",omitempty"`
+}
+
+// DomainApprover contains pairs of valid approver information
+type Approver struct {
+	ApproverEmail string
+	ApproverType  string // Domain, Generic
 }
 
 // OrderResult represents a POST /Order response
@@ -206,7 +224,7 @@ type OrderResult struct {
 		ValidityPeriod         int    // 12 or 24 month (days for AlwaysOnSSL, min. 180, max. 365)
 		DVAuthMethod           string // DNS, EMAIL
 	}
-	// AlwaysOnSSL (Symantec Encryption Everywhere) only:
+	// AlwaysOnSSL (Encryption Everywhere) only:
 	Fulfillment struct {
 		Certificate  string
 		PKCS7        string `json:"Certificate_PKCS7"`
@@ -390,6 +408,7 @@ type GetOrdersRequest struct {
 	IncludeBillingDetails    bool `url:"includeBillingDetails"`
 	IncludeContacts          bool `url:"includeContacts"`
 	IncludeOrganizationInfos bool `url:"includeOrganizationInfos"`
+	IncludeDCVStatus				 bool `url:"includeDCVStatus"`
 }
 
 // GetModifiedOrdersResult represents a GET /ModifiedOrders response
@@ -407,6 +426,7 @@ type GetModifiedOrdersRequest struct {
 	IncludeBillingDetails    bool `url:"includeBillingDetails"`
 	IncludeContacts          bool `url:"includeContacts"`
 	IncludeOrganizationInfos bool `url:"includeOrganizationInfos"`
+	IncludeDCVStatus				 bool `url:"includeDCVStatus"`
 }
 
 // GetOrderResult represents a GET /Order/:CertCenterOrderID response
@@ -423,6 +443,7 @@ type GetOrderRequest struct {
 	IncludeBillingDetails    bool `url:"includeBillingDetails"`
 	IncludeContacts          bool `url:"includeContacts"`
 	IncludeOrganizationInfos bool `url:"includeOrganizationInfos"`
+	IncludeDCVStatus				 bool `url:"includeDCVStatus"`
 }
 
 // DeleteOrderResult represents a DELETE /Order/:CertCenterOrderID response
@@ -464,8 +485,9 @@ type RevokeResult struct {
 // RevokeRequest represents a DELETE /Revoke request
 type RevokeRequest struct {
 	CertCenterOrderID int64
-	RevokeReason      string
-	Certificate       string // PEM encoded X.509 certificate
+	// optional parameters
+	RevokeReason      string `json:",omitempty"`
+	Certificate       string `json:",omitempty"` // PEM encoded X.509 certificate
 }
 
 // ValidateNameResult represents a POST /ValidateName response
@@ -498,7 +520,7 @@ type DNSDataResult struct {
 }
 
 // DNSDataRequest represents a POST /DNSData request
-// https://dash.readme.io/project/certcenter/v1/refs/dnsdata
+// https://developers.certcenter.com/v1/reference#dnsdata
 type DNSDataRequest struct {
 	ProductCode string
 	CSR         string
@@ -515,7 +537,7 @@ type FileDataResult struct {
 }
 
 // FileDataRequest represents a POST /FileData request
-// https://dash.readme.io/project/certcenter/v1/refs/filedata
+// https://developers.certcenter.com/v1/reference#filedata
 type FileDataRequest struct {
 	ProductCode string
 	CSR         string

@@ -27,7 +27,7 @@ func (req *apiRequest) do(apiMethod string, ParamType ...int) error {
 		Transport: &http.Transport{
 			TLSClientConfig: &tls.Config{
 				PreferServerCipherSuites: true,
-				MinVersion:               tls.VersionTLS12,
+				MinVersion: tls.VersionTLS12,
 			},
 		},
 	}
@@ -171,7 +171,7 @@ func (req *apiRequest) kv() error {
 		Transport: &http.Transport{
 			TLSClientConfig: &tls.Config{
 				PreferServerCipherSuites: true,
-				MinVersion:               tls.VersionTLS12,
+				MinVersion: tls.VersionTLS12,
 			},
 		},
 	}
