@@ -1,10 +1,10 @@
 package main
 
 import (
+	certcenter "certcenter.com/go"
 	"fmt"
 	_ "io/ioutil"
 	_ "time"
-	certcenter "certcenter.com/go"
 )
 
 // Set your valid OAuth2 Bearer
@@ -16,12 +16,12 @@ func init() {
 
 func main() {
 	// Get a Quote
-  //
+	//
 	res, _ := certcenter.Quote(&certcenter.QuoteRequest{
-		ProductCode: "Symantec.SecureSiteEV",
+		ProductCode:         "Symantec.SecureSiteEV",
 		SubjectAltNameCount: 0,
-		ValidityPeriod: 24,
-		ServerCount: 1,
+		ValidityPeriod:      24,
+		ServerCount:         1,
 	})
 	fmt.Println(res)
 	return

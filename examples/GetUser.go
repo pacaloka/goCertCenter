@@ -1,10 +1,10 @@
 package main
 
 import (
+	certcenter "certcenter.com/go"
 	"fmt"
 	_ "io/ioutil"
 	_ "time"
-	certcenter "certcenter.com/go"
 )
 
 // Set your valid OAuth2 Bearer
@@ -19,7 +19,7 @@ func main() {
 	// https://developers.certcenter.com/v1/reference#getuser
 	//
 	res, _ := certcenter.GetUser(&certcenter.GetUserRequest{
-	certcenter.UserData{
+		certcenter.UserData{
 			UsernameOrUserId: "1234567",
 		}})
 	fmt.Println(res)

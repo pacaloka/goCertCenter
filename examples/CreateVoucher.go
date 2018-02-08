@@ -1,10 +1,10 @@
 package main
 
 import (
+	certcenter "certcenter.com/go"
 	"fmt"
 	_ "io/ioutil"
 	_ "time"
-	certcenter "certcenter.com/go"
 )
 
 // Set your valid OAuth2 Bearer
@@ -19,12 +19,12 @@ func main() {
 	// https://developers.certcenter.com/v1/reference#createvoucher
 	//
 	res, _ := certcenter.CreateVoucher(&certcenter.CreateVoucherRequest{
-		OrderParameters:certcenter.OrderParameters{
-			ProductCode: "Thawte.SSL123",
-			PartnerOrderID: "My voucher order id (optional)",
-			ServerCount: 1,
+		OrderParameters: certcenter.OrderParameters{
+			ProductCode:         "Thawte.SSL123",
+			PartnerOrderID:      "My voucher order id (optional)",
+			ServerCount:         1,
 			SubjectAltNameCount: 0,
-			ValidityPeriod: 12,
+			ValidityPeriod:      12,
 		},
 	})
 	fmt.Println(res)

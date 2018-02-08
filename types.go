@@ -177,7 +177,7 @@ type UserAgreementResult struct {
 type ApproverListRequest struct {
 	CommonName  string
 	ProductCode string `json:",omitempty"`
-	DNSNames string `json:",omitempty"`
+	DNSNames    string `json:",omitempty"`
 }
 
 // ApproverListRequest represents a GET /ApproverList response
@@ -196,14 +196,14 @@ type DomainApprovers struct {
 }
 
 type DomainApproverItem struct {
-	Domain string `json:",omitempty"`
+	Domain    string     `json:",omitempty"`
 	Approvers []Approver `json:",omitempty"`
 }
 
 // DomainApprover contains pairs of valid approver information
 type Approver struct {
 	ApproverEmail string
-	ApproverType  string // Domain, Generic
+	ApproverType  string `json:",omitempty"` // Domain or Generic
 }
 
 // OrderResult represents a POST /Order response
@@ -234,18 +234,19 @@ type OrderResult struct {
 
 // OrderParameters represents generic Order Parameters
 type OrderParameters struct {
-	CSR                    string   `json:",omitempty"` // PEM-encoded PKCS#10
-	IsCompetitiveUpgrade   bool     `json:",omitempty"`
-	IsRenewal              bool     `json:",omitempty"`
-	PartnerOrderID         string   `json:",omitempty"`
-	ProductCode            string   `json:",omitempty"`
-	ServerCount            int      `json:",omitempty"`
-	SignatureHashAlgorithm string   `json:",omitempty"`
-	SubjectAltNameCount    int      `json:",omitempty"`
-	SubjectAltNames        []string `json:",omitempty"`
-	ValidityPeriod         int      `json:",omitempty"` // 12 or 24 month (days for AlwaysOnSSL, min. 180, max. 365)
-	DVAuthMethod           string   `json:",omitempty"` // DNS, EMAIL
-	ApproverEmail          string   `json:",omitempty"`
+	CSR                    string           `json:",omitempty"` // PEM-encoded PKCS#10
+	IsCompetitiveUpgrade   bool             `json:",omitempty"`
+	IsRenewal              bool             `json:",omitempty"`
+	PartnerOrderID         string           `json:",omitempty"`
+	ProductCode            string           `json:",omitempty"`
+	ServerCount            int              `json:",omitempty"`
+	SignatureHashAlgorithm string           `json:",omitempty"`
+	SubjectAltNameCount    int              `json:",omitempty"`
+	SubjectAltNames        []string         `json:",omitempty"`
+	ValidityPeriod         int              `json:",omitempty"` // 12 or 24 month (days for AlwaysOnSSL, min. 180, max. 365)
+	DVAuthMethod           string           `json:",omitempty"` // DNS, EMAIL
+	DomainApprovers        *DomainApprovers `json:",omitempty"` // Domain Control Validation
+	ApproverEmail          string           `json:",omitempty"` // deprecated
 }
 
 // OrganizationInfo represents organizational information
@@ -408,7 +409,7 @@ type GetOrdersRequest struct {
 	IncludeBillingDetails    bool `url:"includeBillingDetails"`
 	IncludeContacts          bool `url:"includeContacts"`
 	IncludeOrganizationInfos bool `url:"includeOrganizationInfos"`
-	IncludeDCVStatus				 bool `url:"includeDCVStatus"`
+	IncludeDCVStatus         bool `url:"includeDCVStatus"`
 }
 
 // GetModifiedOrdersResult represents a GET /ModifiedOrders response
@@ -426,7 +427,7 @@ type GetModifiedOrdersRequest struct {
 	IncludeBillingDetails    bool `url:"includeBillingDetails"`
 	IncludeContacts          bool `url:"includeContacts"`
 	IncludeOrganizationInfos bool `url:"includeOrganizationInfos"`
-	IncludeDCVStatus				 bool `url:"includeDCVStatus"`
+	IncludeDCVStatus         bool `url:"includeDCVStatus"`
 }
 
 // GetOrderResult represents a GET /Order/:CertCenterOrderID response
@@ -443,7 +444,7 @@ type GetOrderRequest struct {
 	IncludeBillingDetails    bool `url:"includeBillingDetails"`
 	IncludeContacts          bool `url:"includeContacts"`
 	IncludeOrganizationInfos bool `url:"includeOrganizationInfos"`
-	IncludeDCVStatus				 bool `url:"includeDCVStatus"`
+	IncludeDCVStatus         bool `url:"includeDCVStatus"`
 }
 
 // DeleteOrderResult represents a DELETE /Order/:CertCenterOrderID response
@@ -486,8 +487,8 @@ type RevokeResult struct {
 type RevokeRequest struct {
 	CertCenterOrderID int64
 	// optional parameters
-	RevokeReason      string `json:",omitempty"`
-	Certificate       string `json:",omitempty"` // PEM encoded X.509 certificate
+	RevokeReason string `json:",omitempty"`
+	Certificate  string `json:",omitempty"` // PEM encoded X.509 certificate
 }
 
 // ValidateNameResult represents a POST /ValidateName response

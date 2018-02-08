@@ -1,10 +1,10 @@
 package main
 
 import (
+	certcenter "certcenter.com/go"
 	"fmt"
 	_ "io/ioutil"
 	_ "time"
-	certcenter "certcenter.com/go"
 )
 
 // Set your valid OAuth2 Bearer
@@ -19,7 +19,7 @@ func main() {
 	//
 	csr, _ := ioutil.ReadFile("csr")
 	res, _ := certcenter.DNSData(&certcenter.DNSDataRequest{
-		CSR: string(csr),
+		CSR:         string(csr),
 		ProductCode: "AlwaysOnSSL.AlwaysOnSSL",
 	})
 	fmt.Println(res)

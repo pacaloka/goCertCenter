@@ -2,9 +2,10 @@ package main
 
 import (
 	"fmt"
-	_ "io/ioutil"
+	"io/ioutil"
 	_ "time"
-	certcenter "certcenter.com/go"
+//	certcenter "certcenter.com/go"
+	certcenter "goCertCenter"
 )
 
 // Set your valid OAuth2 Bearer
@@ -20,22 +21,66 @@ func main() {
 	csr, _ := ioutil.ReadFile("csr")
 	res, _ := certcenter.Order(&certcenter.OrderRequest{
 			OrderParameters: &certcenter.OrderParameters{
-				ProductCode: "RapidSSL.RapidSSL",
+				ProductCode: "Comodo.InstantSSL",
 				CSR: string(csr),
 				ValidityPeriod: 24,
-				ApproverEmail:"domains@certcenter.com",
+				ServerCount: 1,
+				DomainApprovers: &certcenter.DomainApprovers{
+					DomainApprover: []certcenter.DomainApproverItem{certcenter.DomainApproverItem{
+						Domain: "certcenter.com",
+						Approvers: []certcenter.Approver{certcenter.Approver{
+							ApproverEmail: "domains@certcenter.com",
+						}},
+					}},
+				},
+			},
+			OrganizationInfo: &certcenter.OrganizationInfo{
+				OrganizationName: "CertCenter AG",
+				OrganizationAddress: &certcenter.OrganizationAddress{
+					AddressLine1: "Bleichstraße 8a",
+					PostalCode: "35390",
+					City: "Gießen",
+					Region: "Hessen",
+					Country: "DE",
+					Phone: "+49 641 80899520",
+					Fax: "+49 641 80899521",
+				},
 			},
 			AdminContact: &certcenter.Contact{
 				FirstName: "John",
 				LastName: "Doe",
-				Phone: "+1 212 999 999",
+				Title: "CTO",
+				Phone: "+49 641 80899520",
+				Fax: "+49 641 80899521",
 				Email: "john.doe@example.com",
+				OrganizationName: "CertCenter AG",
+				OrganizationAddress: &certcenter.OrganizationAddress{
+					AddressLine1: "Bleichstraße 8a",
+					PostalCode: "35390",
+					City: "Gießen",
+					Region: "Hessen",
+					Country: "DE",
+					Phone: "+49 641 80899520",
+					Fax: "+49 641 80899521",
+				},
 			},
 			TechContact: &certcenter.Contact{
 				FirstName: "John",
 				LastName: "Doe",
-				Phone: "+1 212 999 999",
+				Title: "CTO",
+				Phone: "+49 641 80899520",
+				Fax: "+49 641 80899521",
 				Email: "john.doe@example.com",
+				OrganizationName: "CertCenter AG",
+				OrganizationAddress: &certcenter.OrganizationAddress{
+					AddressLine1: "Bleichstraße 8a",
+					PostalCode: "35390",
+					City: "Gießen",
+					Region: "Hessen",
+					Country: "DE",
+					Phone: "+49 641 80899520",
+					Fax: "+49 641 80899521",
+				},
 			},
 		},
 	)

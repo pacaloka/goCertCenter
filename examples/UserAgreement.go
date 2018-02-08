@@ -1,10 +1,10 @@
 package main
 
 import (
+	certcenter "certcenter.com/go"
 	"fmt"
 	_ "io/ioutil"
 	_ "time"
-	certcenter "certcenter.com/go"
 )
 
 // Set your valid OAuth2 Bearer
@@ -16,7 +16,7 @@ func init() {
 
 func main() {
 	// Get the CA's User Subscriber Agreement
-  //
+	//
 	res, _ := certcenter.UserAgreement("Symantec.SecureSite")
 	fmt.Println(res)
 	return

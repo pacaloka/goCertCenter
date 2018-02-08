@@ -1,10 +1,10 @@
 package main
 
 import (
+	certcenter "certcenter.com/go"
 	"fmt"
 	_ "io/ioutil"
 	_ "time"
-	certcenter "certcenter.com/go"
 )
 
 // Set your valid OAuth2 Bearer
@@ -16,12 +16,12 @@ func init() {
 
 func main() {
 	// Revoke a certificate
-  //
+	//
 	res, _ := certcenter.Revoke(&certcenter.RevokeRequest{
 		CertCenterOrderID: 123456789,
 		// Optional parameters
 		RevokeReason: "Key compromised",
-		Certificate: "#PEM-encoded-X.509-Certificate#",
+		Certificate:  "#PEM-encoded-X.509-Certificate#",
 	})
 	fmt.Println(res)
 	return

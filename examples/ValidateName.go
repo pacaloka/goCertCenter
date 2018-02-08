@@ -1,10 +1,10 @@
 package main
 
 import (
+	certcenter "certcenter.com/go"
 	"fmt"
 	_ "io/ioutil"
 	_ "time"
-	certcenter "certcenter.com/go"
 )
 
 // Set your valid OAuth2 Bearer
@@ -19,7 +19,7 @@ func main() {
 	// plus lets you generate a private key and PEM-encoded CSR
 	//
 	res, _ := certcenter.ValidateName(&certcenter.ValidateNameRequest{
-		CommonName: "www.example.com",
+		CommonName:         "www.example.com",
 		GeneratePrivateKey: true,
 	})
 	fmt.Println(res)

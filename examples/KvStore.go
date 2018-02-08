@@ -1,10 +1,10 @@
 package main
 
 import (
+	certcenter "certcenter.com/go"
 	"fmt"
 	_ "io/ioutil"
 	_ "time"
-	certcenter "certcenter.com/go"
 )
 
 // Set your valid OAuth2 Bearer
@@ -21,10 +21,11 @@ func main() {
 	//
 	certcenter.KvStoreAuthorizationKey = ""
 	res, err := certcenter.KvStore(&certcenter.KeyValueStoreRequest{
-			Key: "test.example.com",
-			Value: "201701260800495t3djr2zqhqfvgg1cpjmgs5zx4kd7w51w3cuge90sokdavg6li",
-	}); if err!=nil {
-	  panic("..")
+		Key:   "test.example.com",
+		Value: "201701260800495t3djr2zqhqfvgg1cpjmgs5zx4kd7w51w3cuge90sokdavg6li",
+	})
+	if err != nil {
+		panic("..")
 	}
 	return
 }

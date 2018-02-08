@@ -1,10 +1,10 @@
 package main
 
 import (
+	certcenter "certcenter.com/go"
 	"fmt"
 	_ "io/ioutil"
 	_ "time"
-	certcenter "certcenter.com/go"
 )
 
 // Set your valid OAuth2 Bearer
@@ -16,7 +16,7 @@ func init() {
 
 func main() {
 	// Validate a CSR
-  //
+	//
 	csr, _ := ioutil.ReadFile("csr")
 	res, _ := certcenter.ValidateCSR(&certcenter.ValidateCSRRequest{
 		CSR: string(csr),

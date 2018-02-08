@@ -1,10 +1,10 @@
 package main
 
 import (
+	certcenter "certcenter.com/go"
 	"fmt"
 	_ "io/ioutil"
 	_ "time"
-	certcenter "certcenter.com/go"
 )
 
 // Set your valid OAuth2 Bearer
@@ -16,12 +16,12 @@ func init() {
 
 func main() {
 	// Reissue a particular order
-  //
+	//
 	res, _ := certcenter.Reissue(&certcenter.ReissueRequest{
 		CertCenterOrderID: 123456789,
-		OrderParameters:certcenter.ReissueOrderParameters{
-			CSR: "#CSR#",
-			DVAuthMethod: "EMAIL",
+		OrderParameters: certcenter.ReissueOrderParameters{
+			CSR:                    "#CSR#",
+			DVAuthMethod:           "EMAIL",
 			SignatureHashAlgorithm: "SHA256-FULL-CHAIN",
 		},
 		ReissueEmail: "valid-approver@example.com",

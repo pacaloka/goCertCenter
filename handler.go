@@ -156,7 +156,7 @@ func (req *apiRequest) do(apiMethod string, ParamType ...int) error {
 }
 
 // kv allows you to use CertCenter's free key-value storage in conjunction
-// with AlwaysOnSSL (aka Symantec Encryption Everywhere) certificates as
+// with AlwaysOnSSL (aka DigiCert Encryption Everywhere) certificates as
 // described at https://developers.certcenter.com/docs/tutorial-integrate-alwaysonssl
 //
 func (req *apiRequest) kv() error {

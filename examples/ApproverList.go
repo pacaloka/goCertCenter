@@ -1,8 +1,8 @@
 package main
 
 import (
-	"fmt"
 	certcenter "certcenter.com/go"
+	"fmt"
 )
 
 // Set your valid OAuth2 Bearer
@@ -14,7 +14,7 @@ func init() {
 func main() {
 	// Get valid email addresses for email based DV validation
 	res, _ := certcenter.ApproverList(&certcenter.ApproverListRequest{
-		CommonName: "www.example.com",
+		CommonName:  "www.example.com",
 		ProductCode: "GeoTrust.QuickSSLPremium",
 		// optional value (comma seperated list of hosts)
 		//DNSNames: "www.example.org, www.example.co.uk",
@@ -22,12 +22,12 @@ func main() {
 
 	if res.DomainApprovers != (&certcenter.DomainApprovers{}) {
 		// Make use of the new DomainApprovers structure
-		for i:=0; i < len(res.DomainApprovers.DomainApprover); i++ {
+		for i := 0; i < len(res.DomainApprovers.DomainApprover); i++ {
 			fmt.Println(res.DomainApprovers.DomainApprover[i])
 		}
 	} else {
 		// Use the legacy structure (provided by non-compatible CAs)
-		for i:=0; i < len(res.ApproverList); i++ {
+		for i := 0; i < len(res.ApproverList); i++ {
 			fmt.Println(res.ApproverList[i])
 		}
 	}

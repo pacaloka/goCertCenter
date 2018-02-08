@@ -1,10 +1,10 @@
 package main
 
 import (
+	certcenter "certcenter.com/go"
 	"fmt"
 	_ "io/ioutil"
 	_ "time"
-	certcenter "certcenter.com/go"
 )
 
 // Set your valid OAuth2 Bearer
@@ -18,7 +18,7 @@ func main() {
 	// Re-set the approvers email address
 	res, _ := certcenter.PutApproverEmail(&certcenter.PutApproverEmailRequest{
 		CertCenterOrderID: 123456789,
-		ApproverEmail: "valid-approver@example.com",
+		ApproverEmail:     "valid-approver@example.com",
 	})
 	fmt.Println(res)
 	return

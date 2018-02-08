@@ -1,10 +1,10 @@
 package main
 
 import (
+	certcenter "certcenter.com/go"
 	"fmt"
 	_ "io/ioutil"
 	_ "time"
-	certcenter "certcenter.com/go"
 )
 
 // Set your valid OAuth2 Bearer
@@ -21,12 +21,12 @@ func main() {
 	res, _ := certcenter.CreateUser(&certcenter.CreateUserRequest{
 		certcenter.UserData{
 			FullName: "John Doe",
-			Email: "john@example.org",
+			Email:    "john@example.org",
 			Username: "johndoes",
 			Password: "cOmpL3xx/",
-			Mobile: "",
-			Roles: []string{"PROCUREMENT"},
-			Locale: "en_US",
+			Mobile:   "",
+			Roles:    []string{"PROCUREMENT"},
+			Locale:   "en_US",
 			Timezone: "US/Pacific",
 		},
 	})

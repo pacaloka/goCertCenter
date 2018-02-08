@@ -191,8 +191,8 @@ func Revoke(request *RevokeRequest) (*RevokeResult, error) {
 	return req.result.(*RevokeResult), err
 }
 
-// ValidateName checks a CommonName against the Symantec EE blacklist
-// (AlwaysOnSSL/Symantec EE only)
+// ValidateName checks a CommonName against the DigiCert EE blacklist
+// (AlwaysOnSSL/DigiCert EE only)
 //
 func ValidateName(request *ValidateNameRequest) (*ValidateNameResult, error) {
 	req := new(apiRequest)
@@ -204,7 +204,7 @@ func ValidateName(request *ValidateNameRequest) (*ValidateNameResult, error) {
 }
 
 // DNSData retrieve appropriate data for DNS based validation
-// (AlwaysOnSSL/Symantec EE only)
+// (AlwaysOnSSL/DigiCert EE only)
 //
 func DNSData(request *DNSDataRequest) (*DNSDataResult, error) {
 	req := new(apiRequest)
@@ -216,7 +216,7 @@ func DNSData(request *DNSDataRequest) (*DNSDataResult, error) {
 }
 
 // FileData retrieve appropriate data for FILE based validation
-// (AlwaysOnSSL/Symantec EE only)
+// (AlwaysOnSSL/DigiCert EE only)
 //
 func FileData(request *FileDataRequest) (*FileDataResult, error) {
 	req := new(apiRequest)
@@ -228,7 +228,7 @@ func FileData(request *FileDataRequest) (*FileDataResult, error) {
 }
 
 // VulnerabilityAssessment allows you to configure the
-// Vulnerability Assessment (Symantec certificates, only!)
+// Vulnerability Assessment (DigiCert certificates, only!)
 //
 func VulnerabilityAssessment(request *VulnerabilityAssessmentRequest) (*VulnerabilityAssessmentResult, error) {
 	req := new(apiRequest)
