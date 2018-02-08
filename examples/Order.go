@@ -4,8 +4,7 @@ import (
 	"fmt"
 	"io/ioutil"
 	_ "time"
-//	certcenter "certcenter.com/go"
-	certcenter "goCertCenter"
+	certcenter "certcenter.com/go"
 )
 
 // Set your valid OAuth2 Bearer
