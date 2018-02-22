@@ -26,6 +26,20 @@ func main() {
 		IncludeOrganizationInfos: true,
 		IncludeDCVStatus:         true,
 	})
-	fmt.Println(res)
+
+	if len(res.OrderInfo.DCVStatus)>0 {
+		for _, DCVDomainStatus := range res.OrderInfo.DCVStatus {
+			fmt.Printf("Authentication Domain: %s\n"+
+					"Current status: %s\n"+
+					"Last Check: %s\n"+
+					"Last Update: %s\n\n",
+					DCVDomainStatus.Domain,
+					DCVDomainStatus.Status,
+					DCVDomainStatus.LastCheckDate,
+					DCVDomainStatus.LastUpdateDate,
+				 )
+		}
+	}
+
 	return
 }
