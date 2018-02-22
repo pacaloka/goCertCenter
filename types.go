@@ -153,6 +153,9 @@ type ValidateCSRResult struct {
 		KeyLength              int
 		SignaturAlgorithm      string
 		KeyEncryptionAlgorithm string
+		HashMD5                string
+		HashSHA256             string
+		UniqueValue            string
 	}
 }
 
@@ -222,7 +225,7 @@ type OrderResult struct {
 		SubjectAltNameCount    int
 		SubjectAltNames        []string
 		ValidityPeriod         int    // 12 or 24 month (days for AlwaysOnSSL, min. 180, max. 365)
-		DVAuthMethod           string // DNS, EMAIL
+		DVAuthMethod           string // DNS, EMAIL, FILE
 	}
 	// AlwaysOnSSL (Encryption Everywhere) only:
 	Fulfillment struct {
@@ -234,19 +237,19 @@ type OrderResult struct {
 
 // OrderParameters represents generic Order Parameters
 type OrderParameters struct {
-	CSR                    string           `json:",omitempty"` // PEM-encoded PKCS#10
-	IsCompetitiveUpgrade   bool             `json:",omitempty"`
-	IsRenewal              bool             `json:",omitempty"`
-	PartnerOrderID         string           `json:",omitempty"`
-	ProductCode            string           `json:",omitempty"`
-	ServerCount            int              `json:",omitempty"`
-	SignatureHashAlgorithm string           `json:",omitempty"`
-	SubjectAltNameCount    int              `json:",omitempty"`
-	SubjectAltNames        []string         `json:",omitempty"`
-	ValidityPeriod         int              `json:",omitempty"` // 12 or 24 month (days for AlwaysOnSSL, min. 180, max. 365)
-	DVAuthMethod           string           `json:",omitempty"` // DNS, EMAIL
+	CSR                    string   `json:",omitempty"` // PEM-encoded PKCS#10
+	IsCompetitiveUpgrade   bool     `json:",omitempty"`
+	IsRenewal              bool     `json:",omitempty"`
+	PartnerOrderID         string   `json:",omitempty"`
+	ProductCode            string   `json:",omitempty"`
+	ServerCount            int      `json:",omitempty"`
+	SignatureHashAlgorithm string   `json:",omitempty"`
+	SubjectAltNameCount    int      `json:",omitempty"`
+	SubjectAltNames        []string `json:",omitempty"`
+	ValidityPeriod         int      `json:",omitempty"` // 12 or 24 month (days for AlwaysOnSSL, min. 180, max. 365)
+	DVAuthMethod           string   `json:",omitempty"` // DNS, EMAIL, FILE
 	DomainApprovers        *DomainApprovers `json:",omitempty"` // Domain Control Validation
-	ApproverEmail          string           `json:",omitempty"` // deprecated
+	ApproverEmail          string   `json:",omitempty"` // deprecated
 }
 
 // OrganizationInfo represents organizational information
@@ -337,7 +340,7 @@ type OrderInfo struct {
 		ValidityPeriod  int
 		ServerCount     int32
 		ProductCode     string
-		DVAuthMethod    string // DV certificates only
+		DVAuthMethod    string
 		SubjectAltNames []string
 	}
 	ContactInfo struct { // if includeContacts
@@ -465,8 +468,9 @@ type ReissueResult struct {
 // ReissueOrderParameters represents the required OrderParameters for POST /Reissue
 type ReissueOrderParameters struct {
 	CSR                    string
-	DVAuthMethod           string // for DV certificates only
+	DVAuthMethod           string
 	SignatureHashAlgorithm string
+	DomainApprovers        *DomainApprovers `json:",omitempty"` // Domain Control Validation
 }
 
 // ReissueRequest represents a POST /Reissue request
