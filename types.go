@@ -237,19 +237,19 @@ type OrderResult struct {
 
 // OrderParameters represents generic Order Parameters
 type OrderParameters struct {
-	CSR                    string   `json:",omitempty"` // PEM-encoded PKCS#10
-	IsCompetitiveUpgrade   bool     `json:",omitempty"`
-	IsRenewal              bool     `json:",omitempty"`
-	PartnerOrderID         string   `json:",omitempty"`
-	ProductCode            string   `json:",omitempty"`
-	ServerCount            int      `json:",omitempty"`
-	SignatureHashAlgorithm string   `json:",omitempty"`
-	SubjectAltNameCount    int      `json:",omitempty"`
-	SubjectAltNames        []string `json:",omitempty"`
-	ValidityPeriod         int      `json:",omitempty"` // 12 or 24 month (days for AlwaysOnSSL, min. 180, max. 365)
-	DVAuthMethod           string   `json:",omitempty"` // DNS, EMAIL, FILE
+	CSR                    string           `json:",omitempty"` // PEM-encoded PKCS#10
+	IsCompetitiveUpgrade   bool             `json:",omitempty"`
+	IsRenewal              bool             `json:",omitempty"`
+	PartnerOrderID         string           `json:",omitempty"`
+	ProductCode            string           `json:",omitempty"`
+	ServerCount            int              `json:",omitempty"`
+	SignatureHashAlgorithm string           `json:",omitempty"`
+	SubjectAltNameCount    int              `json:",omitempty"`
+	SubjectAltNames        []string         `json:",omitempty"`
+	ValidityPeriod         int              `json:",omitempty"` // 12 or 24 month (days for AlwaysOnSSL, min. 180, max. 365)
+	DVAuthMethod           string           `json:",omitempty"` // DNS, EMAIL, FILE
 	DomainApprovers        *DomainApprovers `json:",omitempty"` // Domain Control Validation
-	ApproverEmail          string   `json:",omitempty"` // deprecated
+	ApproverEmail          string           `json:",omitempty"` // deprecated
 }
 
 // OrganizationInfo represents organizational information
@@ -310,80 +310,93 @@ type ResendApproverEmailRequest struct {
 	CertCenterOrderID int64
 }
 
+type OrderStatus struct {
+	MajorStatus string
+	MinorStatus string
+	OrderDate   time.Time
+	UpdateDate  time.Time
+	StartDate   time.Time
+	EndDate     time.Time
+	Progress    int
+}
+
+type ConfigurationAssessment struct { // done by ssllabs.com
+	Engine          string
+	Ranking         string
+	Effective       time.Time
+	CriteriaVersion string
+}
+
+type BillingInfo struct {
+	Price      float32
+	Currency   string
+	Status     string
+	InvoiceRef string // if available (Status == cleared)
+}
+
+type ContactInfoPair struct {
+	AdminContact Contact
+	TechContact  Contact
+}
+
+type Fulfillment struct {
+	StartDate     time.Time
+	EndDate       time.Time
+	CSR           string
+	Certificate   string
+	Intermediate  string
+	DownloadLinks struct { // cert.sh download links
+		Certificate  string
+		Intermediate string
+		IconScript   string
+		PKCS7        string
+	}
+}
+
+type DNSAuthDetails struct { // for DV orders with DNS auth and includeOrderParameters [deprecated]
+	DNSEntry string
+	DNSValue string
+	Example  string
+}
+
+type FileAuthDetails struct { // for DV orders with FILE auth and includeOrderParameters [deprecated]
+	FileContents string
+	FileName     string
+	FilePath     string
+	PollStatus   string
+	LastPollDate time.Time
+}
+
+type EmailAuthDetails struct { // for DV orders with EMAIL auth and includeOrderParameters [deprecated]
+	ApproverEmail       string
+	ApproverNotifyDate  time.Time
+	ApproverConfirmDate time.Time
+}
+
 // OrderInfo contains all information about a certain order
 type OrderInfo struct {
-	CertCenterOrderID int64
-	CommonName        string
-	OrderStatus       struct {
-		MajorStatus string
-		MinorStatus string
-		OrderDate   time.Time
-		UpdateDate  time.Time
-		StartDate   time.Time
-		EndDate     time.Time
-		Progress    int
-	}
-	ConfigurationAssessment struct { // done by ssllabs.com
-		Engine          string
-		Ranking         string
-		Effective       time.Time
-		CriteriaVersion string
-	}
-	BillingInfo struct {
-		Price      float32
-		Currency   string
-		Status     string
-		InvoiceRef string // if available (Status == cleared)
-	}
-	OrderParameters struct {
-		PartnerOrderID  string
-		ValidityPeriod  int
-		ServerCount     int32
-		ProductCode     string
-		DVAuthMethod    string
-		SubjectAltNames []string
-	}
-	ContactInfo struct { // if includeContacts
-		AdminContact Contact
-		TechContact  Contact
-	}
-	OrganizationInfo struct { // if !DV
-		OrganizationName    string
-		OrganizationAddress OrganizationAddress
-	}
-	Fulfillment struct {
-		StartDate     time.Time
-		EndDate       time.Time
-		CSR           string
-		Certificate   string
-		Intermediate  string
-		DownloadLinks struct { // cert.sh download links
-			Certificate  string
-			Intermediate string
-			IconScript   string
-			PKCS7        string
-		}
-	}
-	DNSAuthDetails struct { // for DV orders with DNS auth and includeOrderParameters
-		DNSEntry string
-		DNSValue string
-		Example  string
-	}
-	FileAuthDetails struct { // for DV orders with FILE auth and includeOrderParameters
-		FileContents string
-		FileName     string
-		FilePath     string
-		PollStatus   string
-		LastPollDate time.Time
-	}
-	MetaAuthDetails struct { // for GlobalSign DV orders with META auth and includeOrderParameters (deprecated)
-		MetaTag string
-	}
-	EmailAuthDetails struct { // for DV orders with EMAIL auth and includeOrderParameters
-		ApproverEmail       string
-		ApproverNotifyDate  time.Time
-		ApproverConfirmDate time.Time
-	}
+	CertCenterOrderID       int64
+	CommonName              string
+	OrderStatus             OrderStatus
+	ConfigurationAssessment ConfigurationAssessment
+	BillingInfo             BillingInfo
+	OrderParameters         OrderParameters
+	ContactInfo             ContactInfoPair
+	OrganizationInfo        OrganizationInfo
+	Fulfillment             Fulfillment
+	DNSAuthDetails          DNSAuthDetails
+	FileAuthDetails         FileAuthDetails
+	EmailAuthDetails        EmailAuthDetails
+	DCVStatus               []DCVStatus
+}
+
+type DCVStatus struct {
+	DomainControlValidationID int32
+	Domain                    string
+	Status                    string
+	ApproverEmail             string
+	LastCheckDate             time.Time
+	LastUpdateDate            time.Time
 }
 
 // GetOrdersResult represents a GET /Orders response
@@ -396,8 +409,8 @@ type GetOrdersResult struct {
 		Page           int64
 		OrderBy        string
 		OrderDir       string
-		Status         string
-		ProductType    string
+		Status         []string
+		ProductType    []string
 		CommonName     string
 	} `json:"_meta"`
 }
@@ -589,8 +602,8 @@ type UserData struct {
 	Scope                      string `json:",omitempty"`
 	Active                     bool   `json:",omitempty"`
 	TwoFactorEnabled           bool   `json:",omitempty"`
-	InsertData                 int64  `json:",omitempty"` // Unix time
-	LastUpdateData             int64  `json:",omitempty"` // Unix time
+	InsertDate                 int64  `json:",omitempty"` // Unix time
+	LastUpdateDate             int64  `json:",omitempty"` // Unix time
 	LastPasswordChangeDate     int64  `json:",omitempty"` // Unix time
 }
 
