@@ -60,12 +60,13 @@ func (req *apiRequest) do(apiMethod string, ParamType ...int) error {
 			} else if apiMethod == "VulnerabilityAssessment" {
 				req.url = fmt.Sprintf("%s/%d", req.url,
 					req.request.(*VulnerabilityAssessmentRequest).CertCenterOrderID)
-			} else if apiMethod == "User" {
-				req.url = fmt.Sprintf("%s/%s", req.url, req.request.(*GetUserRequest).UsernameOrUserId)
+				} else if apiMethod == "User" {
+					req.url = fmt.Sprintf("%s/%s", req.url, req.request.(*GetUserRequest).UsernameOrUserId)
+			} else if apiMethod == "BaseDomain" {
+				req.url = fmt.Sprintf("%s/%s", req.url, req.request.(*BaseDomainRequest).FQDN)
 			} else if apiMethod == "DeleteUser" {
 				apiMethod = "User"
 				req.httpMethod = "DELETE"
-				fmt.Println(req.request.(*DeleteUserRequest).UsernameOrUserId)
 				req.url = fmt.Sprintf("%sUser/%s", rawURL, req.request.(*DeleteUserRequest).UsernameOrUserId)
 			} else if apiMethod == "GetVoucher" {
 				apiMethod = "Voucher"

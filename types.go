@@ -237,19 +237,19 @@ type OrderResult struct {
 
 // OrderParameters represents generic Order Parameters
 type OrderParameters struct {
-	CSR                    string   `json:",omitempty"` // PEM-encoded PKCS#10
-	IsCompetitiveUpgrade   bool     `json:",omitempty"`
-	IsRenewal              bool     `json:",omitempty"`
-	PartnerOrderID         string   `json:",omitempty"`
-	ProductCode            string   `json:",omitempty"`
-	ServerCount            int      `json:",omitempty"`
-	SignatureHashAlgorithm string   `json:",omitempty"`
-	SubjectAltNameCount    int      `json:",omitempty"`
-	SubjectAltNames        []string `json:",omitempty"`
-	ValidityPeriod         int      `json:",omitempty"` // 12 or 24 month (days for AlwaysOnSSL, min. 180, max. 365)
-	DVAuthMethod           string   `json:",omitempty"` // DNS, EMAIL, FILE
+	CSR                    string           `json:",omitempty"` // PEM-encoded PKCS#10
+	IsCompetitiveUpgrade   bool             `json:",omitempty"`
+	IsRenewal              bool             `json:",omitempty"`
+	PartnerOrderID         string           `json:",omitempty"`
+	ProductCode            string           `json:",omitempty"`
+	ServerCount            int              `json:",omitempty"`
+	SignatureHashAlgorithm string           `json:",omitempty"`
+	SubjectAltNameCount    int              `json:",omitempty"`
+	SubjectAltNames        []string         `json:",omitempty"`
+	ValidityPeriod         int              `json:",omitempty"` // 12 or 24 month (days for AlwaysOnSSL, min. 180, max. 365)
+	DVAuthMethod           string           `json:",omitempty"` // DNS, EMAIL, FILE
 	DomainApprovers        *DomainApprovers `json:",omitempty"` // Domain Control Validation
-	ApproverEmail          string   `json:",omitempty"` // deprecated
+	ApproverEmail          string           `json:",omitempty"` // deprecated
 }
 
 // OrganizationInfo represents organizational information
@@ -357,6 +357,7 @@ type DNSAuthDetails struct { // for DV orders with DNS auth and includeOrderPara
 	DNSEntry string
 	DNSValue string
 	Example  string
+	FQDNs    []string
 }
 
 type FileAuthDetails struct { // for DV orders with FILE auth and includeOrderParameters [deprecated]
@@ -365,6 +366,7 @@ type FileAuthDetails struct { // for DV orders with FILE auth and includeOrderPa
 	FilePath     string
 	PollStatus   string
 	LastPollDate time.Time
+	FQDNs        []string
 }
 
 type EmailAuthDetails struct { // for DV orders with EMAIL auth and includeOrderParameters [deprecated]
@@ -375,28 +377,28 @@ type EmailAuthDetails struct { // for DV orders with EMAIL auth and includeOrder
 
 // OrderInfo contains all information about a certain order
 type OrderInfo struct {
-	CertCenterOrderID int64
-	CommonName        string
-	OrderStatus       OrderStatus
+	CertCenterOrderID       int64
+	CommonName              string
+	OrderStatus             OrderStatus
 	ConfigurationAssessment ConfigurationAssessment
-	BillingInfo       BillingInfo
-	OrderParameters   OrderParameters
-	ContactInfo				ContactInfoPair
-	OrganizationInfo	OrganizationInfo
-	Fulfillment		    Fulfillment
-	DNSAuthDetails    DNSAuthDetails
-	FileAuthDetails   FileAuthDetails
-	EmailAuthDetails  EmailAuthDetails
-	DCVStatus         []DCVStatus
+	BillingInfo             BillingInfo
+	OrderParameters         OrderParameters
+	ContactInfo             ContactInfoPair
+	OrganizationInfo        OrganizationInfo
+	Fulfillment             Fulfillment
+	DNSAuthDetails          DNSAuthDetails
+	FileAuthDetails         FileAuthDetails
+	EmailAuthDetails        EmailAuthDetails
+	DCVStatus               []DCVStatus
 }
 
 type DCVStatus struct {
 	DomainControlValidationID int32
-	Domain string
-	Status string
-	ApproverEmail string
-	LastCheckDate time.Time
-	LastUpdateDate time.Time
+	Domain                    string
+	Status                    string
+	ApproverEmail             string
+	LastCheckDate             time.Time
+	LastUpdateDate            time.Time
 }
 
 // GetOrdersResult represents a GET /Orders response
@@ -506,6 +508,15 @@ type RevokeRequest struct {
 	// optional parameters
 	RevokeReason string `json:",omitempty"`
 	Certificate  string `json:",omitempty"` // PEM encoded X.509 certificate
+}
+
+type BaseDomainRequest struct {
+	FQDN string `json:"fqdn"`
+}
+
+type BaseDomainResult struct {
+	FQDN   string `json:"fqdn"`
+	Domain string `json:"domain"`
 }
 
 // ValidateNameResult represents a POST /ValidateName response

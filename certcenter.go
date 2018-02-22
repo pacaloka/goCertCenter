@@ -191,6 +191,17 @@ func Revoke(request *RevokeRequest) (*RevokeResult, error) {
 	return req.result.(*RevokeResult), err
 }
 
+// BaseDomain allows you to fetch a registered base domain for a FQDN
+//
+func BaseDomain(request *BaseDomainRequest) (*BaseDomainResult, error) {
+	req := new(apiRequest)
+	req.result = new(BaseDomainResult)
+	req.request = request
+	err := req.do("BaseDomain", CC_PARAM_TYPE_PATH)
+	checkErr(err)
+	return req.result.(*BaseDomainResult), err
+}
+
 // ValidateName checks a CommonName against the DigiCert EE blacklist
 // (AlwaysOnSSL/DigiCert EE only)
 //
