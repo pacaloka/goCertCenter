@@ -1,4 +1,4 @@
-[![API Reference](http://img.shields.io/badge/api-reference-blue.svg)](https://developers.certcenter.com/v1/reference)
+[![API Reference](http://img.shields.io/badge/api-reference-blue.svg)](https://api.certcenter.help/v1/reference)
 [![Go Report Card](https://goreportcard.com/badge/github.com/CertCenter/goCertCenter)](https://goreportcard.com/report/github.com/CertCenter/goCertCenter)
 
 It is quite easy to use CertCenter's API with your Go projects.<br>
@@ -23,7 +23,7 @@ func main() {
 
 	// Get a Quote
 	res, _ := certcenter.Quote(&certcenter.QuoteRequest{
-		ProductCode: "Symantec.SecureSiteEV",
+		ProductCode: "DigiCert.SecureSiteEV",
 		SubjectAltNameCount: 0,
 		ValidityPeriod: 24,
 		ServerCount: 1,
