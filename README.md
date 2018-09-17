@@ -40,6 +40,6 @@ func main() {
 ```
 
 Find more examples and detailed information:
-https://developers.certcenter.com/v1/reference
+https://api.certcenter.help/v1/reference
 
 Have fun!
