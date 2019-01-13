@@ -14,7 +14,6 @@ func init() {
 func order(CommonName string, Period int) {
 	resValidateName, err := certcenter.ValidateName(&certcenter.ValidateNameRequest{
 		CommonName:         CommonName,
-		GeneratePrivateKey: true,
 	})
 	if err != nil {
 		panic("..")
@@ -24,11 +23,8 @@ func order(CommonName string, Period int) {
 		panic("CommonName is not qualified (blacklisted)")
 	}
 
-	fmt.Println("Your PrivateKey (save it):")
-	fmt.Println(resValidateName.PrivateKey)
-
 	resFileData, err := certcenter.FileData(&certcenter.FileDataRequest{
-		CSR:         resValidateName.CSR,
+		CSR:         "#CSR#",
 		ProductCode: "AlwaysOnSSL.AlwaysOnSSL",
 	})
 	if err != nil {
@@ -46,7 +42,7 @@ func order(CommonName string, Period int) {
 	resOrder, _ := certcenter.Order(&certcenter.OrderRequest{
 		OrderParameters: &certcenter.OrderParameters{
 			ProductCode:    "AlwaysOnSSL.AlwaysOnSSL",
-			CSR:            resValidateName.CSR,
+			CSR:            "#CSR#",
 			DVAuthMethod:   "FILE",
 			ValidityPeriod: Period,
 		},
