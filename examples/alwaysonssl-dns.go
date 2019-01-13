@@ -22,7 +22,6 @@ func init() {
 func fetch(CommonName string) {
 	resValidateName, err := certcenter.ValidateName(&certcenter.ValidateNameRequest{
 		CommonName:         CommonName,
-		GeneratePrivateKey: true,
 	})
 	if err != nil {
 		panic(err)
@@ -32,20 +31,8 @@ func fetch(CommonName string) {
 		panic("CommonName is not qualified (blacklisted)")
 	}
 
-	err = ioutil.WriteFile("crt.csr", []byte(resValidateName.CSR), 0400)
-	if err != nil {
-		panic(err)
-	}
-	fmt.Println("Your CSR has been saved (crt.csr)")
-
-	err = ioutil.WriteFile("crt.key", []byte(resValidateName.PrivateKey), 0400)
-	if err != nil {
-		panic(err)
-	}
-	fmt.Println("Your PrivateKey has been saved (crt.key)")
-
 	resDNSData, err := certcenter.DNSData(&certcenter.DNSDataRequest{
-		CSR:         resValidateName.CSR,
+		CSR:         "#CSR#",
 		ProductCode: "AlwaysOnSSL.AlwaysOnSSL",
 	})
 	if err != nil {
