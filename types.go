@@ -533,7 +533,9 @@ type ValidateNameResult struct {
 // https://developers.certcenter.com/v1/reference#validatename
 type ValidateNameRequest struct {
 	CommonName         string
-	GeneratePrivateKey bool // Generates a private key for you.
+	// PLEASE DO NOT USE THIS FUNCTIONALITY IN PRODUCTIVE ENVIRONMENTS. THIS IS FOR TESTING PURPOSES ONLY.
+	// WE STRONGLY RECOMMEND YOU TO GENERATE YOUR OWN PRIVATE KEYS TO ENSURE MAXIMUM SECURITY.
+	GeneratePrivateKey bool
 	// If true the response will also include the CSR and PrivateKey values.
 }
 
