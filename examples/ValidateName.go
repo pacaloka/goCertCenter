@@ -18,7 +18,7 @@ func main() {
 	// Check a CommonName against the black list (AlwaysOnSSL only!)
 	//
 	res, _ := certcenter.ValidateName(&certcenter.ValidateNameRequest{
-		CommonName:         "www.example.com",
+		CommonName:         "ValidateName.go",
 	})
 	fmt.Println(res)
 	return
